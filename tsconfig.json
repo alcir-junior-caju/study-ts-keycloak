@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2020", "DOM"],
+    "strict": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "hono/jsx",
+    "baseUrl": "./src",
+    "paths": {
+      "@modules/*": ["modules/*"],
+    },
+    "types": [
+      "vitest/globals",
+    ],
+  }
+}
