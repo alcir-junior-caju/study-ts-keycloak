@@ -1,2 +1,2 @@
-export * from './useCase'
+export * from './application'
 export * from './domain'
