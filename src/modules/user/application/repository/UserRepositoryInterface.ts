@@ -1,7 +1,7 @@
 import { type UserEntity } from '@modules/user/domain'
 
 export interface UserRepositoryInterface {
-  save: (user: UserEntity) => Promise<UserEntity>
-  update: (user: UserEntity) => Promise<UserEntity>
+  save: (user: UserEntity) => Promise<void>
+  update: (user: UserEntity) => Promise<void>
   find: (id: string) => Promise<UserEntity>
 }
