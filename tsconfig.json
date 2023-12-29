@@ -5,6 +5,7 @@
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
     "baseUrl": "./src",
+    "esModuleInterop": true,
     "paths": {
       "@modules/*": ["modules/*"],
     },

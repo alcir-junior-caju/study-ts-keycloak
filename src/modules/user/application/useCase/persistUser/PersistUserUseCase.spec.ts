@@ -1,5 +1,5 @@
 import { IdValueObject } from '@modules/shared'
-import { type UserGatewayInterface, PersistUserUseCase, UserEntity } from '@modules/user'
+import { type UserRepositoryInterface, PersistUserUseCase, UserEntity } from '@modules/user'
 
 const userStub = new UserEntity({
   id: new IdValueObject('123'),
@@ -8,7 +8,7 @@ const userStub = new UserEntity({
   password: '123456'
 })
 
-const MockUserRepository = (updated?: boolean): UserGatewayInterface => ({
+const MockUserRepository = (updated?: boolean): UserRepositoryInterface => ({
   save: vitest.fn(),
   update: vitest.fn(),
   find: updated ? vitest.fn().mockResolvedValue(Promise.resolve(null)) : vitest.fn().mockResolvedValue(Promise.resolve(userStub))
