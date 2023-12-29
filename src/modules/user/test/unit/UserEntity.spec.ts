@@ -1,5 +1,5 @@
 import { IdValueObject } from '@modules/shared'
-import { UserEntity } from './UserEntity'
+import { UserEntity } from '@modules/user'
 
 const userStub = {
   id: new IdValueObject('123'),

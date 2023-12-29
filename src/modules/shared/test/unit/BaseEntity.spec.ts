@@ -1,5 +1,4 @@
-import { IdValueObject } from '../valueObject'
-import { BaseEntity } from './BaseEntity'
+import { BaseEntity, IdValueObject } from '@modules/shared'
 
 describe('BaseEntity', () => {
   it('should be test default entity empty', () => {

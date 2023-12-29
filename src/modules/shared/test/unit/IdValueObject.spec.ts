@@ -1,4 +1,4 @@
-import { IdValueObject } from './IdValueObject'
+import { IdValueObject } from '@modules/shared'
 
 describe('IdValueObject', () => {
   it('should be test default value object empty', () => {
