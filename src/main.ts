@@ -1,7 +1,12 @@
-import { serve } from '@hono/node-server'
-import { Hono } from 'hono'
+import { HonoAdapter, PersistUserUseCase, PgPromiseAdapter, UserHttpController, UserRepository } from './modules'
 
-const app = new Hono()
-app.get('/', (c) => c.text('Hello Hono!'))
+async function main (): Promise<void> {
+  const connection = new PgPromiseAdapter()
+  const userRepository = new UserRepository(connection)
+  const persistUser = new PersistUserUseCase(userRepository)
+  const httpServer = new HonoAdapter()
+  new UserHttpController(httpServer, persistUser)
+  httpServer.listen(8888)
+}
 
-serve(app)
+main()

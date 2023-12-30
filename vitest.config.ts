@@ -10,7 +10,8 @@ export default defineConfig({
         '**/node_modules/**',
         '**/*Dto.ts',
         '**/*Interface.ts',
-        '**/index.ts'
+        '**/index.ts',
+        '**/main.ts'
       ]
     }
   },
