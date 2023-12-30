@@ -14,7 +14,10 @@ describe('UserApi', () => {
     expect(response.data).toEqual({
       id: expect.any(String),
       name: input.name,
-      email: input.email
+      email: input.email,
+      password: input.password,
+      createdAt: expect.any(String),
+      updatedAt: expect.any(String)
     })
   })
 })

@@ -25,7 +25,10 @@ export class PersistUserUseCase implements UseCaseInterface<InputPersistUserDto,
       return {
         id: user.id.value,
         name: user.name,
-        email: user.email
+        email: user.email,
+        password: user.password,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt
       }
     }
     const user = new UserEntity(inputUser)
@@ -33,7 +36,10 @@ export class PersistUserUseCase implements UseCaseInterface<InputPersistUserDto,
     return {
       id: user.id.value,
       name: user.name,
-      email: user.email
+      email: user.email,
+      password: user.password,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
     }
   }
 
