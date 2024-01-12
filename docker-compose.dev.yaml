@@ -1,5 +1,7 @@
 version: '3'
+
 services:
+
   postgres:
     image: postgres:latest
     container_name: postgres
@@ -15,3 +17,46 @@ services:
     volumes:
       - ./databases/dumps/postgres.sql:/docker-entrypoint-initdb.d/postgres.sql
       - ./databases/postgres:/var/lib/postgresql/data
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.1
+    container_name: keycloak
+    command: start-dev
+    ports:
+      - 8787:8080
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=mysql
+      - KC_DB_URL=jdbc:mysql://mysql:3306/keycloak
+      - KC_DB_USERNAME=root
+      - KC_DB_PASSWORD=root
+    volumes:
+      - ./keywind/theme/keywind:/opt/keycloak/themes/keywind
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - keycloak-network
+
+  mysql:
+    image: mysql:8.0.30-debian
+    platform: linux/x86_64
+    volumes:
+      - ./databases/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=keycloak
+    security_opt:
+      - seccomp:unconfined
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 3
+    networks:
+      - keycloak-network
+
+networks:
+  keycloak-network:
+    external: true
