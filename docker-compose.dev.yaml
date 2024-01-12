@@ -1,0 +1,17 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    platform: linux/x86_64
+    restart: always
+    tty: true
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    ports:
+      - 5432:5432
+    volumes:
+      - ./databases/dumps/postgres.sql:/docker-entrypoint-initdb.d/postgres.sql
+      - ./databases/postgres:/var/lib/postgresql/data
