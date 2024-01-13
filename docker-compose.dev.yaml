@@ -19,7 +19,9 @@ services:
       - ./databases/postgres:/var/lib/postgresql/data
 
   keycloak:
-    image: quay.io/keycloak/keycloak:21.1
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
     container_name: keycloak
     command: start-dev
     ports:
@@ -41,6 +43,7 @@ services:
 
   mysql:
     image: mysql:8.0.30-debian
+    container_name: mysql
     platform: linux/x86_64
     volumes:
       - ./databases/mysql:/var/lib/mysql
