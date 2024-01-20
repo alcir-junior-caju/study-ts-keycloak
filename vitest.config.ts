@@ -11,7 +11,9 @@ export default defineConfig({
         '**/*Dto.ts',
         '**/*Interface.ts',
         '**/index.ts',
-        '**/main.ts'
+        '**/main.ts',
+        '**/keycloak/**',
+        '**/keywind/**'
       ]
     }
   },
