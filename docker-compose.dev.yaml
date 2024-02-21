@@ -34,7 +34,7 @@ services:
       - KC_DB_USERNAME=root
       - KC_DB_PASSWORD=root
     volumes:
-      - ./keywind/theme/keywind:/opt/keycloak/themes/keywind
+      - ./keycloak/keywind/theme/keywind:/opt/keycloak/themes/keywind
     depends_on:
       mysql:
         condition: service_healthy
