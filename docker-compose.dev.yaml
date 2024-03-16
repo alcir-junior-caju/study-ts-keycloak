@@ -2,9 +2,9 @@ version: '3'
 
 services:
 
-  postgres:
+  keycloak-postgres:
     image: postgres:latest
-    container_name: postgres
+    container_name: keycloak-postgres
     platform: linux/x86_64
     restart: always
     tty: true
@@ -18,11 +18,11 @@ services:
       - ./databases/dumps/postgres.sql:/docker-entrypoint-initdb.d/postgres.sql
       - ./databases/postgres:/var/lib/postgresql/data
 
-  keycloak:
+  keycloak-study:
     build:
       context: ./docker
       dockerfile: Dockerfile
-    container_name: keycloak
+    container_name: keycloak-study
     command: start-dev
     ports:
       - 8787:8080
@@ -36,14 +36,14 @@ services:
     volumes:
       - ./keycloak/keywind/theme/keywind:/opt/keycloak/themes/keywind
     depends_on:
-      mysql:
+      keycloak-mysql:
         condition: service_healthy
     networks:
       - keycloak-network
 
-  mysql:
+  keycloak-mysql:
     image: mysql:8.0.30-debian
-    container_name: mysql
+    container_name: keycloak-mysql
     platform: linux/x86_64
     volumes:
       - ./databases/mysql:/var/lib/mysql

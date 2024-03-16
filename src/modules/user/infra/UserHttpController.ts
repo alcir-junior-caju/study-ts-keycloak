@@ -14,5 +14,10 @@ export class UserHttpController {
       const output = await this.persistUser.execute(body)
       return output
     })
+
+    this.httpServer.on('PATCH', '/users/:id', async (id: string, body: InputPersistUserDto) => {
+      const output = await this.persistUser.execute({ ...body, id })
+      return output
+    })
   }
 }

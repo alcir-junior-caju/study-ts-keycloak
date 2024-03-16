@@ -1,3 +1,3 @@
 export * from './database'
-export * from './dotenv'
+export * from './adapters'
 export * from './http'
