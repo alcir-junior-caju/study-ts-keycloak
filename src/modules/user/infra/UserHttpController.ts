@@ -1,9 +1,10 @@
 import { type HttpServerInterface } from '@modules/shared'
-import { type PersistUserUseCase } from '../application'
+import { type GetUserUseCase, type PersistUserUseCase } from '../application'
 import { type InputPersistUserDto } from '../application/useCase/persistUser/PersistUserDto'
 import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
 import { type Next } from 'hono'
+import { type Params } from 'hono/router'
 
 const userSchemaPost = z.object({
   name: z.string().min(3),
@@ -14,11 +15,17 @@ const userSchemaPost = z.object({
 export class UserHttpController {
   httpServer: HttpServerInterface
   persistUser: PersistUserUseCase
+  getUser: GetUserUseCase
   private readonly baseUrl = '/users'
 
-  constructor (httpServer: HttpServerInterface, persistUser: PersistUserUseCase) {
+  constructor (
+    httpServer: HttpServerInterface,
+    persistUser: PersistUserUseCase,
+    getUser: GetUserUseCase
+  ) {
     this.httpServer = httpServer
     this.persistUser = persistUser
+    this.getUser = getUser
 
     this.httpServer.on(
       'POST',
@@ -37,8 +44,21 @@ export class UserHttpController {
       'PATCH',
       `${this.baseUrl}/:id`,
       async (_: any, next: Next) => { await next() },
-      async (id: string, body: InputPersistUserDto) => {
+      async (params: Params, body: InputPersistUserDto) => {
+        const { id } = params
         const output = await this.persistUser.execute({ ...body, id })
+        return output
+      }
+    )
+
+    this.httpServer.on(
+      'GET',
+      `${this.baseUrl}/:id`,
+      async (_: any, next: Next) => { await next() },
+      async (params: Params, body: InputPersistUserDto) => {
+        const { id } = params
+        const output = await this.getUser.execute({ id })
+        console.log('OUTPUT', output)
         return output
       }
     )

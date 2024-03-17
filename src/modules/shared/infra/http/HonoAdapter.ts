@@ -35,7 +35,8 @@ export class HonoAdapter implements HttpServerInterface {
     handlerMethod(path, middleware, async (context: Context) => {
       try {
         const body = await context.req.json()
-        const output = await callback(null, body)
+        const params = context.req.param()
+        const output = await callback(params, body)
         return context.json(output)
       } catch (error: any) {
         throw new HTTPException(StatusCode.INTERNAL_SERVER_ERROR as StatusCodeHono, {
