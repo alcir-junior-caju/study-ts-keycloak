@@ -16,6 +16,7 @@
     "@typescript-eslint/ban-types": "off",
     "@typescript-eslint/no-floating-promises": "off",
     "@typescript-eslint/no-unsafe-argument": "off",
+    "no-useless-return": "off",
     "no-new": "off"
   }
 }

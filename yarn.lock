@@ -196,6 +196,11 @@
   resolved "https://registry.yarnpkg.com/@hono/node-server/-/node-server-1.8.2.tgz#940b3a0dbd7adbc510b79b626f3603258493354b"
   integrity sha512-h8l2TBLCPHZBUrrkosZ6L5CpBLj6zdESyF4B+zngiCDF7aZFQJ0alVbLx7jn8PCVi9EyoFf8a4hOZFi1tD95EA==
 
+"@hono/zod-validator@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@hono/zod-validator/-/zod-validator-0.2.0.tgz#77d8f1f167cba85b008a52f594ed823c841b2300"
+  integrity sha512-PC7akbA/DCFY406BL3+ogjYb+7Fgfs/6XPvyURBYMczo0M7kYsTUMnF8hA9mez1RORNCWPqXuFGfKrkoUVPvrQ==
+
 "@humanwhocodes/config-array@^0.11.14":
   version "0.11.14"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.11.14.tgz#d78e481a039f7566ecc9660b4ea7fe6b1fec442b"
@@ -2777,3 +2782,8 @@ yocto-queue@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-1.0.0.tgz#7f816433fb2cbc511ec8bf7d263c3b58a1a3c251"
   integrity sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==
+
+zod@^3.22.4:
+  version "3.22.4"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.22.4.tgz#f31c3a9386f61b1f228af56faa9255e845cf3fff"
+  integrity sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==
