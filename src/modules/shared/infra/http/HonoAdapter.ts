@@ -7,12 +7,14 @@ import { timing } from 'hono/timing'
 import { prettyJSON } from 'hono/pretty-json'
 import { secureHeaders } from 'hono/secure-headers'
 import { HTTPException } from 'hono/http-exception'
+import { type Factory, createFactory } from 'hono/factory'
 import { type StatusCode as StatusCodeHono } from 'hono/utils/http-status'
 import { type HttpMethod, type HttpServerInterface } from './HttpServerInterface'
 import { StatusCode } from './StatusCode'
 
 export class HonoAdapter implements HttpServerInterface {
   private readonly app: Hono
+  private readonly factory: Factory
 
   constructor () {
     this.app = new Hono()
@@ -22,9 +24,10 @@ export class HonoAdapter implements HttpServerInterface {
     this.app.use('*', timing())
     this.app.use('*', prettyJSON())
     this.app.use('*', secureHeaders())
+    this.factory = createFactory()
   }
 
-  on (method: HttpMethod, path: string, middleware: Function, callback: Function): void {
+  on (method: HttpMethod, path: string, middleware: any, callback: Function): void {
     const handlerMethod = this.handlerMethod(method)
     if (!handlerMethod) {
       throw new HTTPException(
@@ -32,7 +35,7 @@ export class HonoAdapter implements HttpServerInterface {
           message: 'method_not_allowed'
         })
     }
-    handlerMethod(path, middleware, async (context: Context) => {
+    const handlers = this.factory.createHandlers(middleware, async (context: Context) => {
       try {
         const params = context.req.param()
         const config = {
@@ -49,7 +52,7 @@ export class HonoAdapter implements HttpServerInterface {
         })
       }
     })
-
+    handlerMethod(path, middleware, ...handlers)
     this.app.notFound((context: Context) => {
       return context.json({
         message: 'user_not_found'

@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
 import { type Next } from 'hono'
 import { type Params } from 'hono/router'
+import { createMiddleware } from 'hono/factory'
 
 const userSchemaPost = z.object({
   name: z.string().min(3),
@@ -30,9 +31,9 @@ export class UserHttpController {
     this.httpServer.on(
       'POST',
       this.resource,
-      zValidator('json', userSchemaPost, (result, context) => {
+      createMiddleware(zValidator('json', userSchemaPost, (result, context) => {
         if (!result.success) context.json({ message: 'invalid_input' }, { status: 400 })
-      }),
+      })),
       async ({ body }: { body: InputPersistUserDto }) => {
         const { id, ...input } = body
         const output = await this.persistUserUseCase.execute(input)
@@ -43,9 +44,9 @@ export class UserHttpController {
     this.httpServer.on(
       'PATCH',
       `${this.resource}/:id`,
-      zValidator('json', userSchemaPost, (result, context) => {
+      createMiddleware(zValidator('json', userSchemaPost, (result, context) => {
         if (!result.success) context.json({ message: 'invalid_input' }, { status: 400 })
-      }),
+      })),
       async ({ params, body }: { params: Params, body: InputPersistUserDto }) => {
         const { id } = params
         const output = await this.persistUserUseCase.execute({ ...body, id })
@@ -56,7 +57,7 @@ export class UserHttpController {
     this.httpServer.on(
       'GET',
       `${this.resource}/:id`,
-      async (_: any, next: Next) => { await next() },
+      createMiddleware(async (_: any, next: Next) => { await next() }),
       async ({ params }: { params: Params }) => {
         const { id } = params
         const output = await this.getUserUseCase.execute({ id })
