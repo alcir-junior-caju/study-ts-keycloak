@@ -13,52 +13,53 @@ const userSchemaPost = z.object({
 })
 
 export class UserHttpController {
-  httpServer: HttpServerInterface
-  persistUser: PersistUserUseCase
-  getUser: GetUserUseCase
-  private readonly baseUrl = '/users'
+  private readonly httpServer: HttpServerInterface
+  private readonly persistUserUseCase: PersistUserUseCase
+  private readonly getUserUseCase: GetUserUseCase
+  private readonly resource = '/users'
 
   constructor (
     httpServer: HttpServerInterface,
-    persistUser: PersistUserUseCase,
-    getUser: GetUserUseCase
+    persistUserUseCase: PersistUserUseCase,
+    getUserUseCase: GetUserUseCase
   ) {
     this.httpServer = httpServer
-    this.persistUser = persistUser
-    this.getUser = getUser
+    this.persistUserUseCase = persistUserUseCase
+    this.getUserUseCase = getUserUseCase
 
     this.httpServer.on(
       'POST',
-      this.baseUrl,
+      this.resource,
       zValidator('json', userSchemaPost, (result, context) => {
         if (!result.success) context.json({ message: 'invalid_input' }, { status: 400 })
       }),
-      async (_: any, body: InputPersistUserDto) => {
+      async ({ body }: { body: InputPersistUserDto }) => {
         const { id, ...input } = body
-        const output = await this.persistUser.execute(input)
+        const output = await this.persistUserUseCase.execute(input)
         return output
       }
     )
 
     this.httpServer.on(
       'PATCH',
-      `${this.baseUrl}/:id`,
-      async (_: any, next: Next) => { await next() },
-      async (params: Params, body: InputPersistUserDto) => {
+      `${this.resource}/:id`,
+      zValidator('json', userSchemaPost, (result, context) => {
+        if (!result.success) context.json({ message: 'invalid_input' }, { status: 400 })
+      }),
+      async ({ params, body }: { params: Params, body: InputPersistUserDto }) => {
         const { id } = params
-        const output = await this.persistUser.execute({ ...body, id })
+        const output = await this.persistUserUseCase.execute({ ...body, id })
         return output
       }
     )
 
     this.httpServer.on(
       'GET',
-      `${this.baseUrl}/:id`,
+      `${this.resource}/:id`,
       async (_: any, next: Next) => { await next() },
-      async (params: Params, body: InputPersistUserDto) => {
+      async ({ params }: { params: Params }) => {
         const { id } = params
-        const output = await this.getUser.execute({ id })
-        console.log('OUTPUT', output)
+        const output = await this.getUserUseCase.execute({ id })
         return output
       }
     )

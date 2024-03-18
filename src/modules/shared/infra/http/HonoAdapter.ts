@@ -34,10 +34,14 @@ export class HonoAdapter implements HttpServerInterface {
     }
     handlerMethod(path, middleware, async (context: Context) => {
       try {
-        const body = await context.req.json()
         const params = context.req.param()
-        const output = await callback(params, body)
-        return context.json(output)
+        const config = {
+          ...(Object.keys(params).length && { params }),
+          ...(method !== 'GET' && { body: await context.req.json() })
+        }
+        const output = await callback({ ...config })
+        const result = context.json(output)
+        return result
       } catch (error: any) {
         throw new HTTPException(StatusCode.INTERNAL_SERVER_ERROR as StatusCodeHono, {
           message: error.message,
