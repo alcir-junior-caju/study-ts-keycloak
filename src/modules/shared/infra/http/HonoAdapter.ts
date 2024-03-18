@@ -55,7 +55,7 @@ export class HonoAdapter implements HttpServerInterface {
     handlerMethod(path, middleware, ...handlers)
     this.app.notFound((context: Context) => {
       return context.json({
-        message: 'user_not_found'
+        message: 'not_found'
       }, {
         status: StatusCode.NOT_FOUND
       })
