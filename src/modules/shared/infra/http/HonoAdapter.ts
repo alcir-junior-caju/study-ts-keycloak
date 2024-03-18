@@ -3,8 +3,9 @@ import { serve } from '@hono/node-server'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 import { compress } from 'hono/compress'
-import { timing } from 'hono/timing'
+import { timing, startTime, endTime } from 'hono/timing'
 import { prettyJSON } from 'hono/pretty-json'
+import { etag } from 'hono/etag'
 import { secureHeaders } from 'hono/secure-headers'
 import { HTTPException } from 'hono/http-exception'
 import { type Factory, createFactory } from 'hono/factory'
@@ -24,6 +25,7 @@ export class HonoAdapter implements HttpServerInterface {
     this.app.use('*', timing())
     this.app.use('*', prettyJSON())
     this.app.use('*', secureHeaders())
+    this.app.use('*', etag())
     this.factory = createFactory()
   }
 
@@ -37,6 +39,7 @@ export class HonoAdapter implements HttpServerInterface {
     }
     const handlers = this.factory.createHandlers(middleware, async (context: Context) => {
       try {
+        startTime(context, 'start')
         const params = context.req.param()
         const config = {
           ...(Object.keys(params).length && { params }),
@@ -44,6 +47,7 @@ export class HonoAdapter implements HttpServerInterface {
         }
         const output = await callback({ ...config })
         const result = context.json(output)
+        endTime(context, 'end')
         return result
       } catch (error: any) {
         throw new HTTPException(StatusCode.INTERNAL_SERVER_ERROR as StatusCodeHono, {
@@ -60,7 +64,6 @@ export class HonoAdapter implements HttpServerInterface {
         status: StatusCode.NOT_FOUND
       })
     })
-
     this.app.onError((error: Error, context: Context) => {
       if (error instanceof HTTPException) {
         return context.json({
