@@ -39,7 +39,7 @@ export class HonoAdapter implements HttpServerInterface {
     }
     const handlers = this.factory.createHandlers(middleware, async (context: Context) => {
       try {
-        startTime(context, 'start')
+        startTime(context, 'request', 'start request')
         const params = context.req.param()
         const config = {
           ...(Object.keys(params).length && { params }),
@@ -47,7 +47,7 @@ export class HonoAdapter implements HttpServerInterface {
         }
         const output = await callback({ ...config })
         const result = context.json(output)
-        endTime(context, 'end')
+        endTime(context, 'request')
         return result
       } catch (error: any) {
         throw new HTTPException(StatusCode.INTERNAL_SERVER_ERROR as StatusCodeHono, {
