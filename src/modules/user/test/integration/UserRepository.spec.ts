@@ -1,4 +1,4 @@
-import { PgPromiseAdapter, type ConnectionInterface, IdValueObject } from '@modules/shared'
+import { type ConnectionInterface, IdValueObject, PgPromiseAdapter } from '@modules/shared'
 import { UserEntity, UserRepository } from '@modules/user'
 
 const userStub = {

@@ -1,4 +1,5 @@
-import { IdValueObject, type ConnectionInterface } from '@modules/shared'
+import { type ConnectionInterface, IdValueObject } from '@modules/shared'
+
 import { type UserRepositoryInterface } from '../application'
 import { UserEntity } from '../domain'
 

@@ -1,6 +1,8 @@
 import { type UseCaseInterface } from '@modules/shared'
-import { type InputGetUserDto, type OutputGetUserDto } from './GetUserDto'
+
 import { type UserRepositoryInterface } from '../../repository'
+
+import { type InputGetUserDto, type OutputGetUserDto } from './GetUserDto'
 
 export class GetUserUseCase implements UseCaseInterface<InputGetUserDto, OutputGetUserDto> {
   private readonly _userRepository: UserRepositoryInterface

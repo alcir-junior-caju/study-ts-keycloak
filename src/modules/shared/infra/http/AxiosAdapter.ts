@@ -1,4 +1,5 @@
 import axios from 'axios'
+
 import { type HttpClientInterface } from './HttpClientInterface'
 
 export class AxiosAdapter implements HttpClientInterface {

@@ -1,5 +1,5 @@
 import { IdValueObject } from '@modules/shared'
-import { type UserRepositoryInterface, PersistUserUseCase, UserEntity } from '@modules/user'
+import { PersistUserUseCase, UserEntity, type UserRepositoryInterface } from '@modules/user'
 
 const userStub = new UserEntity({
   id: new IdValueObject('123'),

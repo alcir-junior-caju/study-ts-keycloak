@@ -1,11 +1,12 @@
+import { zValidator } from '@hono/zod-validator'
 import { type HttpServerInterface } from '@modules/shared'
+import { type Next } from 'hono'
+import { createMiddleware } from 'hono/factory'
+import { type Params } from 'hono/router'
+import { z } from 'zod'
+
 import { type GetUserUseCase, type PersistUserUseCase } from '../application'
 import { type InputPersistUserDto } from '../application/useCase/persistUser/PersistUserDto'
-import { z } from 'zod'
-import { zValidator } from '@hono/zod-validator'
-import { type Next } from 'hono'
-import { type Params } from 'hono/router'
-import { createMiddleware } from 'hono/factory'
 
 const userSchemaPost = z.object({
   name: z.string().min(3),

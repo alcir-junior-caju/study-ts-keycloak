@@ -1,7 +1,8 @@
 import { IdValueObject, type UseCaseInterface } from '@modules/shared'
 import { type UserRepositoryInterface } from '@modules/user'
-import { type InputPersistUserDto, type OutputPersistUserDto } from './PersistUserDto'
 import { UserEntity } from '@modules/user/domain'
+
+import { type InputPersistUserDto, type OutputPersistUserDto } from './PersistUserDto'
 
 export class PersistUserUseCase implements UseCaseInterface<InputPersistUserDto, OutputPersistUserDto> {
   private readonly _userRepository: UserRepositoryInterface

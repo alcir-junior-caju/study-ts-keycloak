@@ -1,4 +1,4 @@
-import { BaseEntity, type IdValueObject, type AggregateRootInterface } from '@modules/shared'
+import { type AggregateRootInterface, BaseEntity, type IdValueObject } from '@modules/shared'
 
 interface Input {
   id?: IdValueObject
