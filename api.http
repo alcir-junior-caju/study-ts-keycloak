@@ -16,9 +16,11 @@ User-Agent: {{userAgent}}
 	"password": "12345678"
 }
 
+@userId = {{createuser.response.body.id}}
+
 ### PUT /users
 # @name updateuser
-PATCH {{baseUrl}}/users/f7584dfb-86a7-4caa-8ad1-b20ef5903d02 HTTP/1.1
+PATCH {{baseUrl}}/users/{{userId}} HTTP/1.1
 Content-Type: {{contentType}}
 User-Agent: {{userAgent}}
 
@@ -30,7 +32,7 @@ User-Agent: {{userAgent}}
 
 ### GET /users
 # @name getusers
-GET {{baseUrl}}/users/f7584dfb-86a7-4caa-8ad1-b20ef5903d02 HTTP/1.1
+GET {{baseUrl}}/users/{{userId}} HTTP/1.1
 Content-Type: {{contentType}}
 User-Agent: {{userAgent}}
 
