@@ -4,8 +4,8 @@
     "build": "tsup",
     "start": "node dist/main.cjs",
     "test": "vitest --run --reporter=verbose",
-    "test:watch": "vitest --watch --reporter=verbose",
-    "test:coverage": "vitest --run --reporter=verbose --coverage"
+    "test:watch": "yarn run test --watch",
+    "test:coverage": "yarn run test --coverage"
   },
   "license": "MIT",
   "type": "module",

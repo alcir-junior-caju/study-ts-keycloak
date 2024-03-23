@@ -1,9 +1,9 @@
 import { defineConfig } from 'tsup'
 
 export default defineConfig({
-  entry: ['src/**/*'],
-  splitting: true,
-  sourcemap: false,
+  entry: ['src/main.ts'],
+  entryPoints: ['src/**/*.ts', '!**/test/**', '!keycloak'],
   outDir: 'dist',
-  minify: true
+  minify: true,
+  clean: true
 })

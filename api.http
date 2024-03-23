@@ -16,7 +16,7 @@ User-Agent: {{userAgent}}
 	"password": "12345678"
 }
 
-@userId = {{createuser.response.body.id}}
+# @userId = {{createuser.response.body.id}}
 
 ### PUT /users
 # @name updateuser
