@@ -35,7 +35,15 @@ export class HonoAdapter implements HttpServerInterface {
       info: {
         title: 'API Documentation',
         description: 'API Documentation for the project',
-        version: '1.0.0'
+        version: '1.0.0',
+        contact: {
+          name: 'Alcir Junior [Caju]',
+          email: 'junior@cajucomunica.com.br'
+        },
+        license: {
+          name: 'MIT',
+          url: 'https://opensource.org/licenses/MIT'
+        }
       }
     })
     this.app.openapi(

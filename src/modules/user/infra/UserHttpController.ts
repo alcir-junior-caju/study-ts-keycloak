@@ -32,6 +32,7 @@ export class UserHttpController {
       createRoute({
         method: 'post',
         path: this.resource,
+        tags: ['Users'],
         request: {
           body: {
             content: {
@@ -68,6 +69,7 @@ export class UserHttpController {
       createRoute({
         method: 'patch',
         path: `${this.resource}/:id`,
+        tags: ['Users'],
         request: {
           params: z.object({
             id: z.string()
@@ -103,6 +105,7 @@ export class UserHttpController {
       createRoute({
         method: 'get',
         path: `${this.resource}/:id`,
+        tags: ['Users'],
         request: {
           params: z.object({
             id: z.string()
