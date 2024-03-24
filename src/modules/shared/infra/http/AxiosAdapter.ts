@@ -25,8 +25,8 @@ export class AxiosAdapter implements HttpClientInterface {
     }
   }
 
-  async put (url: string, body: any): Promise<any> {
-    const response = await axios.put(url, body)
+  async patch (url: string, body: any): Promise<any> {
+    const response = await axios.patch(url, body)
     if (response.status === 422) throw new Error(response?.data?.message as string)
     return {
       data: response.data,

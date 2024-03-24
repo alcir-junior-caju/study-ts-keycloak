@@ -15,6 +15,13 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
+"@asteasolutions/zod-to-openapi@^5.5.0":
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/@asteasolutions/zod-to-openapi/-/zod-to-openapi-5.5.0.tgz#f3be8f1e97ece0fcef2e6ff5e9230da8138d20a6"
+  integrity sha512-d5HwrvM6dOKr3XdeF+DmashGvfEc+1oiEfbscugsiwSTrFtuMa7ETpW9sTNnVgn+hJaz+PRxPQUYD7q9/5dUig==
+  dependencies:
+    openapi3-ts "^4.1.2"
+
 "@babel/helper-string-parser@^7.23.4":
   version "7.23.4"
   resolved "https://registry.yarnpkg.com/@babel/helper-string-parser/-/helper-string-parser-7.23.4.tgz#9478c707febcbbe1ddb38a3d91a2e054ae622d83"
@@ -310,6 +317,24 @@
   version "1.8.2"
   resolved "https://registry.yarnpkg.com/@hono/node-server/-/node-server-1.8.2.tgz#940b3a0dbd7adbc510b79b626f3603258493354b"
   integrity sha512-h8l2TBLCPHZBUrrkosZ6L5CpBLj6zdESyF4B+zngiCDF7aZFQJ0alVbLx7jn8PCVi9EyoFf8a4hOZFi1tD95EA==
+
+"@hono/swagger-ui@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@hono/swagger-ui/-/swagger-ui-0.2.1.tgz#21c9a63b6033033fbdc8ca0e74972cf34a8731c4"
+  integrity sha512-wBxVMRe3/v8xH4o6icmwztiIq0DG0s7+jHVMHVUAoFFCWEQNL2iskMmQtrhSDtsFmBZUeUFQUaaJ6Ir6DOmHLA==
+
+"@hono/zod-openapi@^0.9.9":
+  version "0.9.9"
+  resolved "https://registry.yarnpkg.com/@hono/zod-openapi/-/zod-openapi-0.9.9.tgz#e446c2f60f4b1d5cab0d7d2a53460cf35671d920"
+  integrity sha512-Icak3c8WKNS1gFDWmYs2zJ7ra3js9lDeAXNPf5h3fa0SnJQcjcCrLaG6EZPPAbW92HRwCDeQt8yA/ZVp17HPFg==
+  dependencies:
+    "@asteasolutions/zod-to-openapi" "^5.5.0"
+    "@hono/zod-validator" "0.1.11"
+
+"@hono/zod-validator@0.1.11":
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/@hono/zod-validator/-/zod-validator-0.1.11.tgz#7d3e900f01d4c7be6a8c7a7ea1986caaffef423b"
+  integrity sha512-PQXeHUP0+36qpRt8yfeD7N2jbK3ETlGvSN6dMof/HwUC/APRokQRjpXZm4rrlG71Ft0aWE01+Bm4XejqPie5Uw==
 
 "@hono/zod-validator@^0.2.0":
   version "0.2.0"
@@ -2455,6 +2480,13 @@ onetime@^6.0.0:
   integrity sha512-1FlR+gjXK7X+AsAHso35MnyN5KqGwJRi/31ft6x0M194ht7S+rWAvd7PHss9xSKMzE0asv1pyIHaJYq+BbacAQ==
   dependencies:
     mimic-fn "^4.0.0"
+
+openapi3-ts@^4.1.2:
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/openapi3-ts/-/openapi3-ts-4.2.2.tgz#9460b6626c39f6334f876e43c8de08168d306fdb"
+  integrity sha512-+9g4actZKeb3czfi9gVQ4Br2Ju3KwhCAQJBNaKgye5KggqcBLIhFHH+nIkcm0BUX00TrAJl6dH4JWgM4G4JWrw==
+  dependencies:
+    yaml "^2.3.4"
 
 optionator@^0.9.3:
   version "0.9.3"

@@ -4,13 +4,15 @@
     "build": "tsup",
     "start": "node dist/main.cjs",
     "test": "vitest --run --reporter=verbose",
-    "test:watch": "yarn run test --watch",
-    "test:coverage": "yarn run test --coverage"
+    "test:watch": "vitest --reporter=verbose --watch",
+    "test:coverage": "vitest --run --coverage"
   },
   "license": "MIT",
   "type": "module",
   "dependencies": {
     "@hono/node-server": "^1.8.2",
+    "@hono/swagger-ui": "^0.2.1",
+    "@hono/zod-openapi": "^0.9.9",
     "@hono/zod-validator": "^0.2.0",
     "axios": "^1.6.8",
     "dotenv": "^16.4.5",

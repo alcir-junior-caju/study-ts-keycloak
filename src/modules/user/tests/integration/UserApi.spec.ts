@@ -7,7 +7,7 @@ describe('UserApi', () => {
     const httpClient = new AxiosAdapter()
     const input = {
       name: 'John Doe',
-      email: `${Date.now()}@example.com`,
+      email: `${Date.now()}@create.com`,
       password: '123456789'
     }
     const response = await httpClient.post('http://127.0.0.1:8888/users', input)
@@ -22,20 +22,49 @@ describe('UserApi', () => {
     })
   })
 
+  it('should update user api', async () => {
+    const connection = new PgPromiseAdapter()
+    const userRepository = new UserRepository(connection)
+    const httpClient = new AxiosAdapter()
+    const entity = new UserEntity({
+      name: 'John Doe',
+      email: `${Date.now()}@update.com`,
+      password: '123456789'
+    })
+    await userRepository.save(entity)
+    const input = {
+      name: 'Jane Doe',
+      email: `${Date.now()}@update.com`,
+      password: '987654321'
+    }
+    const response = await httpClient.patch(
+      `http://127.0.0.1:8888/users/${entity.id.value}`,
+      input
+    )
+    const { createdAt, updatedAt, ...output } = response.data
+    expect(response.status).toBe(200)
+    expect(output).toEqual({
+      id: entity.id.value,
+      name: input.name,
+      email: input.email,
+      password: input.password
+    })
+  })
+
   it('should get user api', async () => {
     const connection = new PgPromiseAdapter()
     const userRepository = new UserRepository(connection)
     const httpClient = new AxiosAdapter()
     const entity = new UserEntity({
       name: 'John Doe',
-      email: `${Date.now()}@example.com`,
+      email: `${Date.now()}@get.com`,
       password: '123456789'
     })
     await userRepository.save(entity)
     const response = await httpClient.get(`http://127.0.0.1:8888/users/${entity.id.value}`)
-    const { createdAt, updatedAt, ...rest } = response.data
+    const { createdAt, updatedAt, ...output } = response.data
     expect(response.status).toBe(200)
-    expect(rest).toEqual({
+    expect(output).toEqual({
       id: entity.id.value,
       name: entity.name,
       email: entity.email

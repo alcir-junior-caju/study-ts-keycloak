@@ -1,9 +1,6 @@
-export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
-
 export interface HttpServerInterface {
   on: (
-    method: HttpMethod,
-    path: string,
+    route: Record<any, any>,
     middleware: Function,
     callback: Function,
   ) => void

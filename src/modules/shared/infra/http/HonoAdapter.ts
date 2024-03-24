@@ -1,9 +1,10 @@
 import { serve } from '@hono/node-server'
-import { type Context, Hono } from 'hono'
+import { swaggerUI } from '@hono/swagger-ui'
+import { OpenAPIHono } from '@hono/zod-openapi'
+import { type Context } from 'hono'
 import { compress } from 'hono/compress'
 import { cors } from 'hono/cors'
 import { etag } from 'hono/etag'
-import { createFactory, type Factory } from 'hono/factory'
 import { HTTPException } from 'hono/http-exception'
 import { logger } from 'hono/logger'
 import { prettyJSON } from 'hono/pretty-json'
@@ -11,15 +12,14 @@ import { secureHeaders } from 'hono/secure-headers'
 import { endTime, startTime, timing } from 'hono/timing'
 import { type StatusCode as StatusCodeHono } from 'hono/utils/http-status'
 
-import { type HttpMethod, type HttpServerInterface } from './HttpServerInterface'
+import { type HttpServerInterface } from './HttpServerInterface'
 import { StatusCode } from './StatusCode'
 
 export class HonoAdapter implements HttpServerInterface {
-  private readonly app: Hono
-  private readonly factory: Factory
+  private readonly app: OpenAPIHono
 
   constructor () {
-    this.app = new Hono()
+    this.app = new OpenAPIHono()
     this.app.use('*', cors())
     this.app.use('*', compress())
     this.app.use('*', logger())
@@ -27,37 +27,41 @@ export class HonoAdapter implements HttpServerInterface {
     this.app.use('*', prettyJSON())
     this.app.use('*', secureHeaders())
     this.app.use('*', etag())
-    this.factory = createFactory()
   }
 
-  on (method: HttpMethod, path: string, middleware: any, callback: Function): void {
-    const handlerMethod = this.handlerMethod(method)
-    if (!handlerMethod) {
-      throw new HTTPException(
-        StatusCode.METHOD_NOT_ALLOWED as StatusCodeHono, {
-          message: 'method_not_allowed'
-        })
-    }
-    const handlers = this.factory.createHandlers(middleware, async (context: Context) => {
-      try {
-        startTime(context, 'request', 'start request')
-        const params = context.req.param()
-        const config = {
-          ...(Object.keys(params).length && { params }),
-          ...(method !== 'GET' && { body: await context.req.json() })
-        }
-        const output = await callback({ ...config })
-        const result = context.json(output)
-        endTime(context, 'request')
-        return result
-      } catch (error: any) {
-        throw new HTTPException(StatusCode.INTERNAL_SERVER_ERROR as StatusCodeHono, {
-          message: error.message,
-          cause: error
-        })
+  on (route: any, middleware: any, callback: Function): void {
+    this.app.doc('/doc', {
+      openapi: '3.0.0',
+      info: {
+        title: 'API Documentation',
+        description: 'API Documentation for the project',
+        version: '1.0.0'
       }
     })
-    handlerMethod(path, middleware, ...handlers)
+    this.app.openapi(
+      route,
+      middleware,
+      async (_, context: Context) => {
+        try {
+          startTime(context, 'request', 'start request')
+          const params = context.req.param()
+          const config = {
+            ...(Object.keys(params).length && { params }),
+            ...(route.method !== 'get' && { body: await context.req.json() })
+          }
+          const output = await callback({ ...config })
+          const result = context.json(output)
+          endTime(context, 'request')
+          return result
+        } catch (error: any) {
+          throw new HTTPException(StatusCode.INTERNAL_SERVER_ERROR as StatusCodeHono, {
+            message: error.message,
+            cause: error
+          })
+        }
+      }
+    )
+    this.app.get('/docs', swaggerUI({ url: '/doc' }))
     this.app.notFound((context: Context) => {
       return context.json({
         message: 'not_found'
@@ -87,17 +91,5 @@ export class HonoAdapter implements HttpServerInterface {
       port
     })
     console.log(`Server is running on port ${port}`)
-  }
-
-  private handlerMethod (method: string): Function | undefined {
-    const methodTransformed = method.toLowerCase()
-    switch (methodTransformed) {
-      case 'get': return this.app.get
-      case 'post': return this.app.post
-      case 'put': return this.app.put
-      case 'patch': return this.app.patch
-      case 'delete': return this.app.delete
-      default: return undefined
-    }
   }
 }

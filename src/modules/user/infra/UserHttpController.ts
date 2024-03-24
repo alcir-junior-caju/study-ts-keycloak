@@ -1,7 +1,6 @@
+import { createRoute } from '@hono/zod-openapi'
 import { zValidator } from '@hono/zod-validator'
 import { type HttpServerInterface } from '@modules/shared'
-import { type Next } from 'hono'
-import { createMiddleware } from 'hono/factory'
 import { type Params } from 'hono/router'
 import { z } from 'zod'
 
@@ -30,11 +29,34 @@ export class UserHttpController {
     this.getUserUseCase = getUserUseCase
 
     this.httpServer.on(
-      'POST',
-      this.resource,
-      createMiddleware(zValidator('json', userSchemaPost, (result, context) => {
-        if (!result.success) context.json({ message: 'invalid_input' }, { status: 400 })
-      })),
+      createRoute({
+        method: 'post',
+        path: this.resource,
+        request: {
+          body: {
+            content: {
+              'application/json': {
+                schema: userSchemaPost
+              }
+            }
+          }
+        },
+        responses: {
+          200: {
+            description: 'User created'
+          },
+          400: {
+            description: 'Invalid input'
+          }
+        }
+      }),
+      zValidator(
+        'json',
+        userSchemaPost,
+        (result, context) => {
+          if (!result.success) context.json({ message: 'invalid_input' }, { status: 400 })
+        }
+      ),
       async ({ body }: { body: InputPersistUserDto }) => {
         const { id, ...input } = body
         const output = await this.persistUserUseCase.execute(input)
@@ -43,11 +65,33 @@ export class UserHttpController {
     )
 
     this.httpServer.on(
-      'PATCH',
-      `${this.resource}/:id`,
-      createMiddleware(zValidator('json', userSchemaPost, (result, context) => {
+      createRoute({
+        method: 'patch',
+        path: `${this.resource}/:id`,
+        request: {
+          params: z.object({
+            id: z.string()
+          }),
+          body: {
+            content: {
+              'application/json': {
+                schema: userSchemaPost
+              }
+            }
+          }
+        },
+        responses: {
+          200: {
+            description: 'User updated'
+          },
+          400: {
+            description: 'Invalid input'
+          }
+        }
+      }),
+      zValidator('json', userSchemaPost, (result, context) => {
         if (!result.success) context.json({ message: 'invalid_input' }, { status: 400 })
-      })),
+      }),
       async ({ params, body }: { params: Params, body: InputPersistUserDto }) => {
         const { id } = params
         const output = await this.persistUserUseCase.execute({ ...body, id })
@@ -56,9 +100,24 @@ export class UserHttpController {
     )
 
     this.httpServer.on(
-      'GET',
-      `${this.resource}/:id`,
-      createMiddleware(async (_: any, next: Next) => { await next() }),
+      createRoute({
+        method: 'get',
+        path: `${this.resource}/:id`,
+        request: {
+          params: z.object({
+            id: z.string()
+          })
+        },
+        responses: {
+          200: {
+            description: 'User found'
+          },
+          400: {
+            description: 'Invalid input'
+          }
+        }
+      }),
+      () => {},
       async ({ params }: { params: Params }) => {
         const { id } = params
         const output = await this.getUserUseCase.execute({ id })
