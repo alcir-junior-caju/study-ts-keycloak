@@ -10,7 +10,6 @@ import { logger } from 'hono/logger'
 import { prettyJSON } from 'hono/pretty-json'
 import { secureHeaders } from 'hono/secure-headers'
 import { endTime, startTime, timing } from 'hono/timing'
-import { type StatusCode as StatusCodeHono } from 'hono/utils/http-status'
 
 import { statusCode, swaggerConfig } from './httpConfig'
 import { type HttpServerInterface } from './HttpServerInterface'
@@ -46,7 +45,7 @@ export class HonoAdapter implements HttpServerInterface {
           endTime(context, 'request')
           return result
         } catch (error: any) {
-          throw new HTTPException(statusCode.INTERNAL_SERVER_ERROR as StatusCodeHono, {
+          throw new HTTPException(error.status, {
             message: error.message,
             cause: error
           })
@@ -54,13 +53,6 @@ export class HonoAdapter implements HttpServerInterface {
       }
     )
     this.app.get('/docs', swaggerUI({ url: '/doc' }))
-    this.app.notFound((context: Context) => {
-      return context.json({
-        message: 'not_found'
-      }, {
-        status: statusCode.NOT_FOUND
-      })
-    })
     this.app.onError((error: Error, context: Context) => {
       if (error instanceof HTTPException) {
         return context.json({
