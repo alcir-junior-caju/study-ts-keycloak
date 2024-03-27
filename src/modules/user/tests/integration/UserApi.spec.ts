@@ -42,7 +42,10 @@ describe('UserApi', () => {
         email: `${email}@required.com`
       },
       expected: {
-        message: 'null value in column "password" of relation "users" violates not-null constraint'
+        success: false,
+        errorName: 'ZodError',
+        issuePath: 'password',
+        issueMessage: 'Required'
       }
     },
     {
@@ -51,7 +54,10 @@ describe('UserApi', () => {
         password: '123456789'
       },
       expected: {
-        message: 'null value in column "email" of relation "users" violates not-null constraint'
+        success: false,
+        errorName: 'ZodError',
+        issuePath: 'email',
+        issueMessage: 'Required'
       }
     },
     {
@@ -60,47 +66,61 @@ describe('UserApi', () => {
         password: '123456789'
       },
       expected: {
-        message: 'null value in column "name" of relation "users" violates not-null constraint'
+        success: false,
+        errorName: 'ZodError',
+        issuePath: 'name',
+        issueMessage: 'Required'
+      }
+    },
+    {
+      input: {
+        name: 'J',
+        password: '123456789',
+        email: `${email}@required.com`
+      },
+      expected: {
+        success: false,
+        errorName: 'ZodError',
+        issuePath: 'name',
+        issueMessage: 'String must contain at least 3 character(s)'
+      }
+    },
+    {
+      input: {
+        name: 'John Doe',
+        password: '123456789',
+        email: 'invalid-email'
+      },
+      expected: {
+        success: false,
+        errorName: 'ZodError',
+        issuePath: 'email',
+        issueMessage: 'Invalid email'
+      }
+    },
+    {
+      input: {
+        name: 'John Doe',
+        password: '123',
+        email: `${email}@required.com`
+      },
+      expected: {
+        success: false,
+        errorName: 'ZodError',
+        issuePath: 'password',
+        issueMessage: 'String must contain at least 8 character(s)'
       }
     }
-    // {
-    //   input: {
-    //     name: 'J',
-    //     password: '123456789',
-    //     email: `${email}@required.com`
-    //   },
-    //   expected: {
-    //     message: 'new row for relation "users" violates check constraint "users_name_check"'
-    //   }
-    // },
-    // {
-    //   input: {
-    //     name: 'John Doe',
-    //     password: '123456789',
-    //     email: 'invalid-email'
-    //   },
-    //   expected: {
-    //     message: 'new row for relation "users" violates check constraint "users_email_check"'
-    //   }
-    // },
-    // {
-    //   input: {
-    //     name: 'John Doe',
-    //     password: '123',
-    //     email: `${email}@required.com`
-    //   },
-    //   expected: {
-    //     message: 'new row for relation "users" violates check constraint "users_password_check"'
-    //   }
-    // }
   ]
 
   it.each(userInputRequiredFields)('should return 500 when required fields are missing', async ({ input, expected }) => {
     const httpClient = new AxiosAdapter()
     const response = await httpClient.post('http://127.0.0.1:8888/users', input)
-    console.log(response.data)
-    expect(response.status).toBe(500)
-    expect(response.data).toEqual({ message: expected.message })
+    expect(response.status).toBe(400)
+    expect(response.data.success).toBeFalsy()
+    expect(response.data.error.name).toBe(expected.errorName)
+    expect(response.data.error.issues[0].path[0]).toBe(expected.issuePath)
+    expect(response.data.error.issues[0].message).toBe(expected.issueMessage)
   })
 
   it('should update user api', async () => {

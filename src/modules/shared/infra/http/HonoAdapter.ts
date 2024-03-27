@@ -29,7 +29,7 @@ export class HonoAdapter implements HttpServerInterface {
     this.app.use('*', etag())
   }
 
-  on (route: any, middleware: any, callback: Function): void {
+  on (route: any, callback: any): void {
     this.app.doc('/doc', {
       openapi: '3.0.0',
       info: {
@@ -48,8 +48,7 @@ export class HonoAdapter implements HttpServerInterface {
     })
     this.app.openapi(
       route,
-      middleware,
-      async (_, context: Context) => {
+      async (context: Context) => {
         try {
           startTime(context, 'request', 'start request')
           const params = context.req.param()

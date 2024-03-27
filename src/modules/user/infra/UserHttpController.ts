@@ -1,5 +1,4 @@
 import { createRoute } from '@hono/zod-openapi'
-import { zValidator } from '@hono/zod-validator'
 import { type HttpServerInterface } from '@modules/shared'
 import { type Params } from 'hono/router'
 import { z } from 'zod'
@@ -51,13 +50,6 @@ export class UserHttpController {
           }
         }
       }),
-      zValidator(
-        'json',
-        userSchemaPost,
-        (result, context) => {
-          if (!result.success) context.json({ message: 'invalid_input' }, { status: 400 })
-        }
-      ),
       async ({ body }: { body: InputPersistUserDto }) => {
         const { id, ...input } = body
         const output = await this.persistUserUseCase.execute(input)
@@ -91,9 +83,6 @@ export class UserHttpController {
           }
         }
       }),
-      zValidator('json', userSchemaPost, (result, context) => {
-        if (!result.success) context.json({ message: 'invalid_input' }, { status: 400 })
-      }),
       async ({ params, body }: { params: Params, body: InputPersistUserDto }) => {
         const { id } = params
         const output = await this.persistUserUseCase.execute({ ...body, id })
@@ -120,7 +109,6 @@ export class UserHttpController {
           }
         }
       }),
-      () => {},
       async ({ params }: { params: Params }) => {
         const { id } = params
         const output = await this.getUserUseCase.execute({ id })

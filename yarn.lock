@@ -336,11 +336,6 @@
   resolved "https://registry.yarnpkg.com/@hono/zod-validator/-/zod-validator-0.1.11.tgz#7d3e900f01d4c7be6a8c7a7ea1986caaffef423b"
   integrity sha512-PQXeHUP0+36qpRt8yfeD7N2jbK3ETlGvSN6dMof/HwUC/APRokQRjpXZm4rrlG71Ft0aWE01+Bm4XejqPie5Uw==
 
-"@hono/zod-validator@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@hono/zod-validator/-/zod-validator-0.2.0.tgz#77d8f1f167cba85b008a52f594ed823c841b2300"
-  integrity sha512-PC7akbA/DCFY406BL3+ogjYb+7Fgfs/6XPvyURBYMczo0M7kYsTUMnF8hA9mez1RORNCWPqXuFGfKrkoUVPvrQ==
-
 "@humanwhocodes/config-array@^0.11.14":
   version "0.11.14"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.11.14.tgz#d78e481a039f7566ecc9660b4ea7fe6b1fec442b"
