@@ -2,7 +2,7 @@
 @port = 8888
 @baseUrl = http://{{hostname}}:{{port}}
 @contentType = application/json
-@userAgent = insomnia/8.5.1
+@userAgent = rest-client
 
 ### POST /users
 # @name createuser
@@ -16,7 +16,8 @@ User-Agent: {{userAgent}}
 	"password": "12345678"
 }
 
-# @userId = {{createuser.response.body.id}}
+### Extract userId
+@userId = {{createuser.response.body.id}}
 
 ### PUT /users
 # @name updateuser
