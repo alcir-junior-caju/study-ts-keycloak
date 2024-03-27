@@ -12,8 +12,8 @@ import { secureHeaders } from 'hono/secure-headers'
 import { endTime, startTime, timing } from 'hono/timing'
 import { type StatusCode as StatusCodeHono } from 'hono/utils/http-status'
 
+import { statusCode, swaggerConfig } from './httpConfig'
 import { type HttpServerInterface } from './HttpServerInterface'
-import { StatusCode } from './StatusCode'
 
 export class HonoAdapter implements HttpServerInterface {
   private readonly app: OpenAPIHono
@@ -30,22 +30,7 @@ export class HonoAdapter implements HttpServerInterface {
   }
 
   on (route: any, callback: any): void {
-    this.app.doc('/doc', {
-      openapi: '3.0.0',
-      info: {
-        title: 'API Documentation',
-        description: 'API Documentation for the project',
-        version: '1.0.0',
-        contact: {
-          name: 'Alcir Junior [Caju]',
-          email: 'junior@cajucomunica.com.br'
-        },
-        license: {
-          name: 'MIT',
-          url: 'https://opensource.org/licenses/MIT'
-        }
-      }
-    })
+    this.app.doc('/doc', swaggerConfig)
     this.app.openapi(
       route,
       async (context: Context) => {
@@ -61,7 +46,7 @@ export class HonoAdapter implements HttpServerInterface {
           endTime(context, 'request')
           return result
         } catch (error: any) {
-          throw new HTTPException(StatusCode.INTERNAL_SERVER_ERROR as StatusCodeHono, {
+          throw new HTTPException(statusCode.INTERNAL_SERVER_ERROR as StatusCodeHono, {
             message: error.message,
             cause: error
           })
@@ -73,7 +58,7 @@ export class HonoAdapter implements HttpServerInterface {
       return context.json({
         message: 'not_found'
       }, {
-        status: StatusCode.NOT_FOUND
+        status: statusCode.NOT_FOUND
       })
     })
     this.app.onError((error: Error, context: Context) => {
@@ -87,7 +72,7 @@ export class HonoAdapter implements HttpServerInterface {
       return context.json({
         message: 'internal_server_error'
       }, {
-        status: StatusCode.INTERNAL_SERVER_ERROR
+        status: statusCode.INTERNAL_SERVER_ERROR
       })
     })
   }
