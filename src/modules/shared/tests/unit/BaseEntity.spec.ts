@@ -1,6 +1,8 @@
-import { BaseEntity, IdValueObject } from '@modules/shared'
+import { BaseEntity, IdValueObject, InvalidUUIDError } from '@modules/shared'
 
 describe('BaseEntity', () => {
+  const validateSpy = vi.spyOn(IdValueObject.prototype as any, 'validate')
+
   it('should be test default entity empty', () => {
     const entity = new BaseEntity()
 
@@ -9,8 +11,9 @@ describe('BaseEntity', () => {
     expect(entity.updatedAt).toBeDefined()
   })
 
-  it('should be test default entity with values', () => {
-    const id = new IdValueObject('123')
+  it('should be test entity with values', () => {
+    const idString = 'd290f1ee-6c54-4b01-90e6-d701748f0851'
+    const id = new IdValueObject(idString)
     const createdAt = new Date()
     const updatedAt = new Date()
 
@@ -21,24 +24,32 @@ describe('BaseEntity', () => {
     expect(entity.updatedAt).toBe(updatedAt)
   })
 
-  it('should be test default entity with get id', () => {
-    const id = new IdValueObject('123')
+  it('should be test entity with get id', () => {
+    const idString = 'd290f1ee-6c54-4b01-90e6-d701748f0851'
+    const id = new IdValueObject(idString)
     const entity = new BaseEntity(id)
 
     expect(entity.id).toBe(id)
   })
 
-  it('should be test default entity with get createdAt', () => {
+  it('should be test entity with get createdAt', () => {
     const createdAt = new Date()
     const entity = new BaseEntity(undefined, createdAt)
 
     expect(entity.createdAt).toBe(createdAt)
   })
 
-  it('should be test default entity with get updatedAt', () => {
+  it('should be test entity with get updatedAt', () => {
     const updatedAt = new Date()
     const entity = new BaseEntity(undefined, undefined, updatedAt)
 
     expect(entity.updatedAt).toBe(updatedAt)
+  })
+
+  it('should be test entity with invalid id', () => {
+    expect(() => {
+      new BaseEntity(new IdValueObject('invalid-id'))
+      expect(validateSpy).toBeCalledTimes(1)
+    }).toThrow(new InvalidUUIDError())
   })
 })

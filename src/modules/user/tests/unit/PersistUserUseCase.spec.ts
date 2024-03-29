@@ -1,8 +1,10 @@
 import { IdValueObject } from '@modules/shared'
 import { PersistUserUseCase, UserEntity, type UserRepositoryInterface } from '@modules/user'
 
+const idString = 'd290f1ee-6c54-4b01-90e6-d701748f0851'
+
 const userStub = new UserEntity({
-  id: new IdValueObject('123'),
+  id: new IdValueObject(idString),
   name: 'John Doe',
   email: 'johndoe@email.com',
   password: '123456'
@@ -38,7 +40,7 @@ describe('PersistUserUseCase', () => {
     const persistUserUseCase = new PersistUserUseCase(userRepository)
 
     const input = {
-      id: '123',
+      id: idString,
       name: 'John Doe',
       email: 'johndoe@email.com',
       password: '123456'
@@ -57,10 +59,10 @@ describe('PersistUserUseCase', () => {
     const persistUserUseCase = new PersistUserUseCase(userRepository)
 
     const input = {
-      id: 'xxx',
-      name: 'xxx',
-      email: 'xxx@email.com',
-      password: 'xxxxxx'
+      id: idString,
+      name: 'John Doe',
+      email: 'johndoe@email.com',
+      password: '12345678'
     }
 
     await expect(persistUserUseCase.execute(input)).rejects.toThrow('user_not_found')
