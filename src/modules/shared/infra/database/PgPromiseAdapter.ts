@@ -4,7 +4,16 @@ import { DotEnvAdapter } from '../adapters'
 
 import { type ConnectionInterface } from './ConnectionInterface'
 
-const databaseUrl = `${DotEnvAdapter.get('DATABASE_CLIENT')}://${DotEnvAdapter.get('DATABASE_USERNAME')}:${DotEnvAdapter.get('DATABASE_PASSWORD')}@${DotEnvAdapter.get('DATABASE_HOST')}:${DotEnvAdapter.get('DATABASE_PORT')}/${DotEnvAdapter.get('DATABASE_NAME')}`
+const config = {
+  client: DotEnvAdapter.get('DATABASE_CLIENT'),
+  host: DotEnvAdapter.get('DATABASE_HOST'),
+  port: DotEnvAdapter.get('DATABASE_PORT'),
+  database: DotEnvAdapter.get('DATABASE_NAME'),
+  user: DotEnvAdapter.get('DATABASE_USERNAME'),
+  password: DotEnvAdapter.get('DATABASE_PASSWORD')
+}
+
+const databaseUrl = `${config.client}://${config.user}:${config.password}@${config.host}:${config.port}/${config.database}`
 
 export class PgPromiseAdapter implements ConnectionInterface {
   connection: any
