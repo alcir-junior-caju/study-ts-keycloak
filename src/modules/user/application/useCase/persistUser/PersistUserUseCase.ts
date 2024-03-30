@@ -1,4 +1,4 @@
-import { EmailValueObject, IdValueObject, NameValueObject, type UseCaseInterface } from '@modules/shared'
+import { EmailValueObject, IdValueObject, NameValueObject, TaxIdValueObject, type UseCaseInterface } from '@modules/shared'
 import { type UserRepositoryInterface } from '@modules/user'
 import { UserEntity } from '@modules/user/domain'
 
@@ -15,7 +15,7 @@ export class PersistUserUseCase implements UseCaseInterface<InputPersistUserDto,
     const inputUser = {
       name: new NameValueObject(input.name),
       email: new EmailValueObject(input.email),
-      password: input.password
+      taxId: new TaxIdValueObject(input.taxId)
     }
     const userExists = await this.updateUserIfExist(input)
     if (userExists === null) throw new Error('user_not_found')
@@ -27,7 +27,7 @@ export class PersistUserUseCase implements UseCaseInterface<InputPersistUserDto,
         id: user.id.value,
         name: user.name.value,
         email: user.email.value,
-        password: user.password,
+        taxId: user.taxId.value,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt
       }
@@ -38,7 +38,7 @@ export class PersistUserUseCase implements UseCaseInterface<InputPersistUserDto,
       id: user.id.value,
       name: user.name.value,
       email: user.email.value,
-      password: user.password,
+      taxId: user.taxId.value,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt
     }

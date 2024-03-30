@@ -1,10 +1,10 @@
-drop schema if exists keycloak cascade;
-create schema keycloak;
-create table keycloak.users (
-    id uuid primary key,
-    name text not null,
-    email text not null unique,
-    password text not null,
-    created_at timestamp not null default now(),
-    updated_at timestamp not null default now()
+DROP SCHEMA IF EXISTS keycloak cascade;
+CREATE SCHEMA keycloak;
+CREATE TABLE keycloak.users (
+  id uuid PRIMARY KEY,
+  name text NOT NULL,
+  email text NOT NULL UNIQUE,
+  tax_id text UNIQUE,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );

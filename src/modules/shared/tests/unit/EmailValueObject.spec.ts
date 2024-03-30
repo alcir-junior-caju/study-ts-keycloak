@@ -1,6 +1,6 @@
 import { EmailValueObject, InvalidEmailError } from '@modules/shared/domain'
 
-describe('EmailValueObject', () => {
+describe('EmailValueObject Unit Tests', () => {
   const validateSpy = vi.spyOn(EmailValueObject.prototype as any, 'validate')
 
   it('should be invalid email value object', () => {

@@ -1,17 +1,18 @@
-import { AxiosAdapter, EmailValueObject, NameValueObject, PgPromiseAdapter } from '@modules/shared'
+import { AxiosAdapter, EmailValueObject, NameValueObject, PgPromiseAdapter, TaxIdValueObject } from '@modules/shared'
 import { UserEntity } from '@modules/user/domain'
 import { UserRepository } from '@modules/user/repository'
 
-describe('UserApi', () => {
+describe('UserApi Integration Tests', () => {
   let connection: PgPromiseAdapter
   let userRepository: UserRepository
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     connection = new PgPromiseAdapter()
     userRepository = new UserRepository(connection)
   })
 
-  afterAll(async () => {
+  afterEach(async () => {
+    await connection.query('DELETE FROM keycloak.users')
     await connection.close()
   })
 
@@ -20,15 +21,16 @@ describe('UserApi', () => {
     const input = {
       name: 'John Doe',
       email: `${Date.now()}@create.com`,
-      password: '123456789'
+      taxId: '97456321558'
     }
     const response = await httpClient.post('http://127.0.0.1:8888/users', input)
+
     expect(response.status).toBe(200)
     expect(response.data).toEqual({
       id: expect.any(String),
       name: input.name,
       email: input.email,
-      password: input.password,
+      taxId: input.taxId,
       createdAt: expect.any(String),
       updatedAt: expect.any(String)
     })
@@ -44,14 +46,14 @@ describe('UserApi', () => {
       expected: {
         success: false,
         errorName: 'ZodError',
-        issuePath: 'password',
+        issuePath: 'taxId',
         issueMessage: 'Required'
       }
     },
     {
       input: {
         name: 'John Doe',
-        password: '123456789'
+        taxId: '97456321558'
       },
       expected: {
         success: false,
@@ -63,7 +65,7 @@ describe('UserApi', () => {
     {
       input: {
         email: `${email}@required.com`,
-        password: '123456789'
+        taxId: '97456321558'
       },
       expected: {
         success: false,
@@ -75,7 +77,7 @@ describe('UserApi', () => {
     {
       input: {
         name: 'J',
-        password: '123456789',
+        taxId: '97456321558',
         email: `${email}@required.com`
       },
       expected: {
@@ -88,7 +90,7 @@ describe('UserApi', () => {
     {
       input: {
         name: 'John Doe',
-        password: '123456789',
+        taxId: '97456321558',
         email: 'invalid-email'
       },
       expected: {
@@ -101,19 +103,19 @@ describe('UserApi', () => {
     {
       input: {
         name: 'John Doe',
-        password: '123',
+        taxId: '9745632155',
         email: `${email}@required.com`
       },
       expected: {
         success: false,
         errorName: 'ZodError',
-        issuePath: 'password',
-        issueMessage: 'String must contain at least 8 character(s)'
+        issuePath: 'taxId',
+        issueMessage: 'String must contain at least 11 character(s)'
       }
     }
   ]
 
-  it.each(userInputRequiredFields)('should return 500 when required fields are missing', async ({ input, expected }) => {
+  it.each(userInputRequiredFields)('should return 400 when required field are missing: %s', async ({ input, expected }) => {
     const httpClient = new AxiosAdapter()
     const response = await httpClient.post('http://127.0.0.1:8888/users', input)
     expect(response.status).toBe(400)
@@ -128,13 +130,13 @@ describe('UserApi', () => {
     const entity = new UserEntity({
       name: new NameValueObject('John Doe'),
       email: new EmailValueObject(`${Date.now()}@update.com`),
-      password: '123456789'
+      taxId: new TaxIdValueObject('97456321558')
     })
     await userRepository.save(entity)
     const input = {
       name: 'Jane Doe',
       email: `${Date.now()}@update.com`,
-      password: '987654321'
+      taxId: '48894838021'
     }
     const response = await httpClient.patch(
       `http://127.0.0.1:8888/users/${entity.id.value}`,
@@ -146,7 +148,7 @@ describe('UserApi', () => {
       id: entity.id.value,
       name: input.name,
       email: input.email,
-      password: input.password
+      taxId: input.taxId
     })
   })
 
@@ -155,16 +157,18 @@ describe('UserApi', () => {
     const entity = new UserEntity({
       name: new NameValueObject('John Doe'),
       email: new EmailValueObject(`${Date.now()}@get.com`),
-      password: '123456789'
+      taxId: new TaxIdValueObject('97456321558')
     })
     await userRepository.save(entity)
     const response = await httpClient.get(`http://127.0.0.1:8888/users/${entity.id.value}`)
-    const { createdAt, updatedAt, ...output } = response.data
     expect(response.status).toBe(200)
-    expect(output).toEqual({
+    expect(response.data).toEqual({
       id: entity.id.value,
       name: entity.name.value,
-      email: entity.email.value
+      email: entity.email.value,
+      taxId: entity.taxId.value,
+      createdAt: expect.any(String),
+      updatedAt: expect.any(String)
     })
   })
 })

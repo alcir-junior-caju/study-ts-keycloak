@@ -1,6 +1,6 @@
 import { InvalidNameError, NameValueObject } from '@modules/shared/domain'
 
-describe('NameValueObject', () => {
+describe('NameValueObject Unit Tests', () => {
   const validateSpy = vi.spyOn(NameValueObject.prototype as any, 'validate')
 
   it('should be invalid name value object', () => {

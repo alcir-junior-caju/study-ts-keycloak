@@ -18,6 +18,7 @@ export class GetUserUseCase implements UseCaseInterface<InputGetUserDto, OutputG
       id: user.id.value,
       name: user.name.value,
       email: user.email.value,
+      taxId: user.taxId.value,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt
     }

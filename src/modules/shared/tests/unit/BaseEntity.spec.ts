@@ -1,6 +1,6 @@
 import { BaseEntity, IdValueObject, InvalidUUIDError } from '@modules/shared'
 
-describe('BaseEntity', () => {
+describe('BaseEntity Unit Tests', () => {
   it('should be test entity empty', () => {
     const entity = new BaseEntity()
     expect(entity.id).toBeDefined()

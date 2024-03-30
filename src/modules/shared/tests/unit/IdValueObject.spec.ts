@@ -1,6 +1,6 @@
 import { IdValueObject, InvalidUUIDError } from '@modules/shared'
 
-describe('IdValueObject', () => {
+describe('IdValueObject Unit Tests', () => {
   const validateSpy = vi.spyOn(IdValueObject.prototype as any, 'validate')
 
   it('should be test default value object empty', () => {

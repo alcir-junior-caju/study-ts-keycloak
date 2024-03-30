@@ -6,13 +6,13 @@ const tags = ['Users']
 const userSchemaRequest = z.object({
   name: z.string().min(3),
   email: z.string().email(),
-  password: z.string().min(8)
+  taxId: z.string().min(11)
 })
 
 const userSchemaResponse = z.object({
   name: z.string().min(3),
   email: z.string().email(),
-  password: z.string().min(8),
+  taxId: z.string().min(11),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime()
 })

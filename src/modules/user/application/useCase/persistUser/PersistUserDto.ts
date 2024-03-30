@@ -2,14 +2,14 @@ export interface InputPersistUserDto {
   id?: string
   name: string
   email: string
-  password: string
+  taxId: string
 }
 
 export interface OutputPersistUserDto {
   id: string
   name: string
   email: string
-  password: string
+  taxId: string
   createdAt: Date
   updatedAt: Date
 }
