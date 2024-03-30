@@ -1,8 +1,8 @@
-import { type AggregateRootInterface, BaseEntity, type IdValueObject } from '@modules/shared'
+import { type AggregateRootInterface, BaseEntity, type IdValueObject, type NameValueObject } from '@modules/shared'
 
 interface Input {
   id?: IdValueObject
-  name: string
+  name: NameValueObject
   email: string
   password: string
   createdAt?: Date
@@ -10,7 +10,7 @@ interface Input {
 }
 
 export class UserEntity extends BaseEntity implements AggregateRootInterface {
-  private readonly _name: string
+  private readonly _name: NameValueObject
   private readonly _email: string
   private readonly _password: string
 
@@ -21,7 +21,7 @@ export class UserEntity extends BaseEntity implements AggregateRootInterface {
     this._password = password
   }
 
-  get name (): string {
+  get name (): NameValueObject {
     return this._name
   }
 

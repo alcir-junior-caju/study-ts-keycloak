@@ -16,7 +16,7 @@ export class GetUserUseCase implements UseCaseInterface<InputGetUserDto, OutputG
     if (!user) throw new Error('user_not_found')
     return {
       id: user.id.value,
-      name: user.name,
+      name: user.name.value,
       email: user.email,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt

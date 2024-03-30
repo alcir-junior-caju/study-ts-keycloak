@@ -1,4 +1,4 @@
-import { AxiosAdapter, PgPromiseAdapter } from '@modules/shared'
+import { AxiosAdapter, NameValueObject, PgPromiseAdapter } from '@modules/shared'
 import { UserEntity } from '@modules/user/domain'
 import { UserRepository } from '@modules/user/repository'
 
@@ -126,7 +126,7 @@ describe('UserApi', () => {
   it('should update user api', async () => {
     const httpClient = new AxiosAdapter()
     const entity = new UserEntity({
-      name: 'John Doe',
+      name: new NameValueObject('John Doe'),
       email: `${Date.now()}@update.com`,
       password: '123456789'
     })
@@ -153,7 +153,7 @@ describe('UserApi', () => {
   it('should get user api', async () => {
     const httpClient = new AxiosAdapter()
     const entity = new UserEntity({
-      name: 'John Doe',
+      name: new NameValueObject('John Doe'),
       email: `${Date.now()}@get.com`,
       password: '123456789'
     })
@@ -163,7 +163,7 @@ describe('UserApi', () => {
     expect(response.status).toBe(200)
     expect(output).toEqual({
       id: entity.id.value,
-      name: entity.name,
+      name: entity.name.value,
       email: entity.email
     })
   })

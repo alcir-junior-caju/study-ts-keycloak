@@ -1,8 +1,8 @@
-import { type ConnectionInterface, IdValueObject, PgPromiseAdapter } from '@modules/shared'
+import { type ConnectionInterface, IdValueObject, NameValueObject, PgPromiseAdapter } from '@modules/shared'
 import { UserEntity, UserRepository } from '@modules/user'
 
 const userStub = {
-  name: 'John Doe',
+  name: new NameValueObject('John Doe'),
   email: 'johndoe@rmail.com',
   password: '123456'
 }
@@ -26,7 +26,7 @@ describe('UserRepository', () => {
     await userRepository.save(userEntity)
     const output = await userRepository.find(userEntity.id.value)
     expect(output.id.value).toBe(userEntity.id.value)
-    expect(output.name).toBe(userEntity.name)
+    expect(output.name.value).toBe(userEntity.name.value)
     expect(output.email).toBe(userEntity.email)
     expect(output.password).toBe(userEntity.password)
   })
@@ -40,7 +40,7 @@ describe('UserRepository', () => {
     await userRepository.save(userEntity)
     const output = await userRepository.find(userEntity.id.value)
     expect(output.id.value).toBe(userEntity.id.value)
-    expect(output.name).toBe(userEntity.name)
+    expect(output.name.value).toBe(userEntity.name.value)
     expect(output.email).toBe(userEntity.email)
     expect(output.password).toBe(userEntity.password)
   })
@@ -50,7 +50,7 @@ describe('UserRepository', () => {
     await userRepository.save(userEntity)
     const userUpdated = {
       id: new IdValueObject(userEntity.id.value),
-      name: 'Jane Doe',
+      name: new NameValueObject('Jane Doe'),
       email: 'janedoe@email.com',
       password: '654321'
     }
@@ -58,7 +58,7 @@ describe('UserRepository', () => {
     await userRepository.update(userUpdatedEntity)
     const output = await userRepository.find(userEntity.id.value)
     expect(output.id.value).toBe(userUpdatedEntity.id.value)
-    expect(output.name).toBe(userUpdatedEntity.name)
+    expect(output.name.value).toBe(userUpdatedEntity.name.value)
     expect(output.email).toBe(userUpdatedEntity.email)
     expect(output.password).toBe(userUpdatedEntity.password)
   })

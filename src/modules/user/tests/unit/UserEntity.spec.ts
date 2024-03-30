@@ -1,11 +1,11 @@
-import { IdValueObject, InvalidUUIDError } from '@modules/shared'
+import { IdValueObject, InvalidNameError, InvalidUUIDError, NameValueObject } from '@modules/shared'
 import { UserEntity } from '@modules/user'
 
 const idString = 'd290f1ee-6c54-4b01-90e6-d701748f0851'
 
 const userStub = {
   id: new IdValueObject(idString),
-  name: 'John Doe',
+  name: new NameValueObject('John Doe'),
   email: 'johndoe@email.com',
   password: '123456',
   createdAt: new Date(),
@@ -13,7 +13,7 @@ const userStub = {
 }
 
 const userWithoutIdAndDatesStub = {
-  name: 'John Doe',
+  name: new NameValueObject('John Doe'),
   email: 'johndoe@email.com',
   password: '123456'
 }
@@ -25,7 +25,7 @@ describe('UserEntity', () => {
     expect(userEntity).toBeInstanceOf(UserEntity)
     expect(userEntity.id).toBeInstanceOf(IdValueObject)
     expect(userEntity.id.value).toBe(userStub.id.value)
-    expect(userEntity.name).toBe(userStub.name)
+    expect(userEntity.name.value).toBe(userStub.name.value)
     expect(userEntity.email).toBe(userStub.email)
     expect(userEntity.password).toBe(userStub.password)
     expect(userEntity.createdAt).toBeInstanceOf(Date)
@@ -38,7 +38,7 @@ describe('UserEntity', () => {
     expect(userEntity).toBeInstanceOf(UserEntity)
     expect(userEntity.id).toBeInstanceOf(IdValueObject)
     expect(userEntity.id.value).not.toBe(userStub.id.value)
-    expect(userEntity.name).toBe(userStub.name)
+    expect(userEntity.name.value).toBe(userStub.name.value)
     expect(userEntity.email).toBe(userStub.email)
     expect(userEntity.password).toBe(userStub.password)
     expect(userEntity.createdAt).toBeInstanceOf(Date)
@@ -49,5 +49,11 @@ describe('UserEntity', () => {
     expect(() => {
       new UserEntity({ ...userStub, id: new IdValueObject('invalid_id') })
     }).toThrow(new InvalidUUIDError())
+  })
+
+  it('should be throw an error if name is invalid', () => {
+    expect(() => {
+      new UserEntity({ ...userStub, name: new NameValueObject('invalid-name') })
+    }).toThrow(new InvalidNameError())
   })
 })

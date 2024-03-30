@@ -1,11 +1,11 @@
-import { IdValueObject } from '@modules/shared'
+import { IdValueObject, NameValueObject } from '@modules/shared'
 import { GetUserUseCase, UserEntity, type UserRepositoryInterface } from '@modules/user'
 
 const idString = 'd290f1ee-6c54-4b01-90e6-d701748f0851'
 
 const userStub = new UserEntity({
   id: new IdValueObject(idString),
-  name: 'John Doe',
+  name: new NameValueObject('John Doe'),
   email: 'johndoe@email.com',
   password: '123456'
 })
@@ -29,7 +29,7 @@ describe('GetUserUseCase', () => {
 
     expect(userRepository.find).toBeCalledTimes(1)
     expect(output.id).toBe(userStub.id.value)
-    expect(output.name).toBe(userStub.name)
+    expect(output.name).toBe(userStub.name.value)
     expect(output.email).toBe(userStub.email)
   })
 
