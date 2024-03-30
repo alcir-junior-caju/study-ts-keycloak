@@ -6,43 +6,56 @@ const idString = 'd290f1ee-6c54-4b01-90e6-d701748f0851'
 const userStub = {
   id: new IdValueObject(idString),
   name: new NameValueObject('John Doe'),
-  email: new EmailValueObject('johndoe@email.com'),
-  taxId: new TaxIdValueObject('97456321558'),
-  createdAt: new Date(),
-  updatedAt: new Date()
-}
-
-const userWithoutIdAndDatesStub = {
-  name: new NameValueObject('John Doe'),
-  email: new EmailValueObject('johndoe@email.com'),
-  taxId: new TaxIdValueObject('97456321558')
+  email: new EmailValueObject('johndoe@email.com')
 }
 
 describe('UserEntity Unit Tests', () => {
   it('should be create a new user entity', () => {
     const userEntity = new UserEntity(userStub)
-
     expect(userEntity).toBeInstanceOf(UserEntity)
     expect(userEntity.id).toBeInstanceOf(IdValueObject)
     expect(userEntity.id.value).toBe(userStub.id.value)
+    expect(userEntity.name).toBeInstanceOf(NameValueObject)
     expect(userEntity.name.value).toBe(userStub.name.value)
+    expect(userEntity.email).toBeInstanceOf(EmailValueObject)
     expect(userEntity.email.value).toBe(userStub.email.value)
-    expect(userEntity.taxId.value).toBe(userStub.taxId.value)
     expect(userEntity.createdAt).toBeInstanceOf(Date)
     expect(userEntity.updatedAt).toBeInstanceOf(Date)
   })
 
-  it('should be create a new user entity without id and dates', () => {
-    const userEntity = new UserEntity(userWithoutIdAndDatesStub)
-
+  it('should be create a new user entity with dates', () => {
+    const date = new Date()
+    const userEntity = new UserEntity({
+      ...userStub,
+      createdAt: date,
+      updatedAt: date
+    })
     expect(userEntity).toBeInstanceOf(UserEntity)
     expect(userEntity.id).toBeInstanceOf(IdValueObject)
-    expect(userEntity.id.value).not.toBe(userStub.id.value)
+    expect(userEntity.id.value).toBe(userStub.id.value)
+    expect(userEntity.name).toBeInstanceOf(NameValueObject)
     expect(userEntity.name.value).toBe(userStub.name.value)
+    expect(userEntity.email).toBeInstanceOf(EmailValueObject)
     expect(userEntity.email.value).toBe(userStub.email.value)
-    expect(userEntity.taxId.value).toBe(userStub.taxId.value)
     expect(userEntity.createdAt).toBeInstanceOf(Date)
     expect(userEntity.updatedAt).toBeInstanceOf(Date)
+  })
+
+  it('should be create a new user entity with tax id', () => {
+    const taxId = new TaxIdValueObject('97456321558')
+    const userEntity = new UserEntity({
+      ...userStub,
+      taxId
+    })
+    expect(userEntity).toBeInstanceOf(UserEntity)
+    expect(userEntity.id).toBeInstanceOf(IdValueObject)
+    expect(userEntity.id.value).toBe(userStub.id.value)
+    expect(userEntity.name).toBeInstanceOf(NameValueObject)
+    expect(userEntity.name.value).toBe(userStub.name.value)
+    expect(userEntity.email).toBeInstanceOf(EmailValueObject)
+    expect(userEntity.email.value).toBe(userStub.email.value)
+    expect(userEntity.taxId).toBeInstanceOf(TaxIdValueObject)
+    expect(userEntity.taxId.value).toBe(taxId.value)
   })
 
   it('should be throw an error if id is invalid', () => {
