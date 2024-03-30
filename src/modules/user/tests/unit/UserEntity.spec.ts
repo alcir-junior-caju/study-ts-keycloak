@@ -19,8 +19,6 @@ const userWithoutIdAndDatesStub = {
 }
 
 describe('UserEntity', () => {
-  const validateSpy = vi.spyOn(IdValueObject.prototype as any, 'validate')
-
   it('should be create a new user entity', () => {
     const userEntity = new UserEntity(userStub)
 
@@ -50,7 +48,6 @@ describe('UserEntity', () => {
   it('should be throw an error if id is invalid', () => {
     expect(() => {
       new UserEntity({ ...userStub, id: new IdValueObject('invalid_id') })
-      expect(validateSpy).toBeCalledTimes(1)
     }).toThrow(new InvalidUUIDError())
   })
 })

@@ -1,8 +1,6 @@
 import { BaseEntity, IdValueObject, InvalidUUIDError } from '@modules/shared'
 
 describe('BaseEntity', () => {
-  const validateSpy = vi.spyOn(IdValueObject.prototype as any, 'validate')
-
   it('should be test default entity empty', () => {
     const entity = new BaseEntity()
 
@@ -49,7 +47,6 @@ describe('BaseEntity', () => {
   it('should be test entity with invalid id', () => {
     expect(() => {
       new BaseEntity(new IdValueObject('invalid-id'))
-      expect(validateSpy).toBeCalledTimes(1)
     }).toThrow(new InvalidUUIDError())
   })
 })

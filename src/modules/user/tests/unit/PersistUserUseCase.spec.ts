@@ -1,4 +1,4 @@
-import { IdValueObject } from '@modules/shared'
+import { IdValueObject, InvalidUUIDError } from '@modules/shared'
 import { PersistUserUseCase, UserEntity, type UserRepositoryInterface } from '@modules/user'
 
 const idString = 'd290f1ee-6c54-4b01-90e6-d701748f0851'
@@ -66,5 +66,19 @@ describe('PersistUserUseCase', () => {
     }
 
     await expect(persistUserUseCase.execute(input)).rejects.toThrow('user_not_found')
+  })
+
+  it('should be able to persist a user with invalid id', async () => {
+    const userRepository = MockUserRepository()
+    const persistUserUseCase = new PersistUserUseCase(userRepository)
+
+    const input = {
+      id: 'invalid-id',
+      name: 'John Doe',
+      email: 'johndoe@email.com',
+      password: '123456'
+    }
+
+    await expect(persistUserUseCase.execute(input)).rejects.toThrow(new InvalidUUIDError())
   })
 })
