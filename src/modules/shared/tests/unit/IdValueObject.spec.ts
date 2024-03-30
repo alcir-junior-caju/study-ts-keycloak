@@ -5,14 +5,12 @@ describe('IdValueObject', () => {
 
   it('should be test default value object empty', () => {
     const id = new IdValueObject()
-
     expect(id.value).toBeDefined()
   })
 
   it('should be test default value object with value', () => {
     const idString = 'd290f1ee-6c54-4b01-90e6-d701748f0851'
     const idValueObject = new IdValueObject(idString)
-
     expect(idValueObject.value).toBe(idString)
   })
 

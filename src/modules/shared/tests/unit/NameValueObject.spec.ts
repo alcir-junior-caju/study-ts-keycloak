@@ -18,7 +18,6 @@ describe('NameValueObject', () => {
   it('should be test value with value', () => {
     const nameString = 'John Doe'
     const nameValueObject = new NameValueObject(nameString)
-
     expect(nameValueObject.value).toBe(nameString)
   })
 })

@@ -1,4 +1,4 @@
-import { IdValueObject, InvalidNameError, InvalidUUIDError, NameValueObject } from '@modules/shared'
+import { EmailValueObject, IdValueObject, InvalidNameError, InvalidUUIDError, NameValueObject } from '@modules/shared'
 import { PersistUserUseCase, UserEntity, type UserRepositoryInterface } from '@modules/user'
 
 const idString = 'd290f1ee-6c54-4b01-90e6-d701748f0851'
@@ -6,7 +6,7 @@ const idString = 'd290f1ee-6c54-4b01-90e6-d701748f0851'
 const userStub = new UserEntity({
   id: new IdValueObject(idString),
   name: new NameValueObject('John Doe'),
-  email: 'johndoe@email.com',
+  email: new EmailValueObject('johndoe@email.com'),
   password: '123456'
 })
 

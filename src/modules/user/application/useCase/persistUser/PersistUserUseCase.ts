@@ -1,4 +1,4 @@
-import { IdValueObject, NameValueObject, type UseCaseInterface } from '@modules/shared'
+import { EmailValueObject, IdValueObject, NameValueObject, type UseCaseInterface } from '@modules/shared'
 import { type UserRepositoryInterface } from '@modules/user'
 import { UserEntity } from '@modules/user/domain'
 
@@ -14,7 +14,7 @@ export class PersistUserUseCase implements UseCaseInterface<InputPersistUserDto,
   async execute (input: InputPersistUserDto): Promise<OutputPersistUserDto> {
     const inputUser = {
       name: new NameValueObject(input.name),
-      email: input.email,
+      email: new EmailValueObject(input.email),
       password: input.password
     }
     const userExists = await this.updateUserIfExist(input)
@@ -26,7 +26,7 @@ export class PersistUserUseCase implements UseCaseInterface<InputPersistUserDto,
       return {
         id: user.id.value,
         name: user.name.value,
-        email: user.email,
+        email: user.email.value,
         password: user.password,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt
@@ -37,7 +37,7 @@ export class PersistUserUseCase implements UseCaseInterface<InputPersistUserDto,
     return {
       id: user.id.value,
       name: user.name.value,
-      email: user.email,
+      email: user.email.value,
       password: user.password,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt

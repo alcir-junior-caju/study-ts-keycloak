@@ -1,9 +1,9 @@
-import { type AggregateRootInterface, BaseEntity, type IdValueObject, type NameValueObject } from '@modules/shared'
+import { type AggregateRootInterface, BaseEntity, type EmailValueObject, type IdValueObject, type NameValueObject } from '@modules/shared'
 
 interface Input {
   id?: IdValueObject
   name: NameValueObject
-  email: string
+  email: EmailValueObject
   password: string
   createdAt?: Date
   updatedAt?: Date
@@ -11,7 +11,7 @@ interface Input {
 
 export class UserEntity extends BaseEntity implements AggregateRootInterface {
   private readonly _name: NameValueObject
-  private readonly _email: string
+  private readonly _email: EmailValueObject
   private readonly _password: string
 
   constructor ({ id, name, email, password, createdAt, updatedAt }: Input) {
@@ -25,7 +25,7 @@ export class UserEntity extends BaseEntity implements AggregateRootInterface {
     return this._name
   }
 
-  get email (): string {
+  get email (): EmailValueObject {
     return this._email
   }
 
