@@ -11,7 +11,7 @@ import { prettyJSON } from 'hono/pretty-json'
 import { secureHeaders } from 'hono/secure-headers'
 import { endTime, startTime, timing } from 'hono/timing'
 
-import { statusCode, swaggerConfig } from './httpConfig'
+import { limiter, statusCode, swaggerConfig } from './httpConfig'
 import { type HttpServerInterface } from './HttpServerInterface'
 
 export class HonoAdapter implements HttpServerInterface {
@@ -26,6 +26,7 @@ export class HonoAdapter implements HttpServerInterface {
     this.app.use('*', prettyJSON())
     this.app.use('*', secureHeaders())
     this.app.use('*', etag())
+    this.app.use('*', limiter)
   }
 
   on (route: any, callback: any): void {
