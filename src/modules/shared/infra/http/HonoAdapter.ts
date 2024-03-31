@@ -11,11 +11,14 @@ import { prettyJSON } from 'hono/pretty-json'
 import { secureHeaders } from 'hono/secure-headers'
 import { endTime, startTime, timing } from 'hono/timing'
 
+import { DotEnvAdapter } from '../adapters'
+
 import { limiter, statusCode, swaggerConfig } from './httpConfig'
 import { type HttpServerInterface } from './HttpServerInterface'
 
 export class HonoAdapter implements HttpServerInterface {
   private readonly app: OpenAPIHono
+  private readonly development = DotEnvAdapter.get('NODE_ENV') === 'development'
 
   constructor () {
     this.app = new OpenAPIHono()
@@ -26,7 +29,7 @@ export class HonoAdapter implements HttpServerInterface {
     this.app.use('*', prettyJSON())
     this.app.use('*', secureHeaders())
     this.app.use('*', etag())
-    this.app.use('*', limiter)
+    if (!this.development) this.app.use('*', limiter)
   }
 
   on (route: any, callback: any): void {
