@@ -37,6 +37,8 @@ export const userPatchRoute = {
   method: 'patch',
   path: `${resource}/:id`,
   tags,
+  summary: 'Update user',
+  description: 'Update user description',
   request: {
     params: z.object({
       id: z.string().uuid()
@@ -83,6 +85,8 @@ export const userGetRoute = {
   method: 'get',
   path: `${resource}/:id`,
   tags,
+  summary: 'Get user',
+  description: 'Get user description',
   request: {
     params: z.object({
       id: z.string().uuid()

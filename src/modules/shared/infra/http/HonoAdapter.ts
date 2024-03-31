@@ -1,6 +1,6 @@
 import { serve } from '@hono/node-server'
-import { swaggerUI } from '@hono/swagger-ui'
 import { OpenAPIHono } from '@hono/zod-openapi'
+import { apiReference } from '@scalar/hono-api-reference'
 import { type Context } from 'hono'
 import { compress } from 'hono/compress'
 import { cors } from 'hono/cors'
@@ -52,7 +52,12 @@ export class HonoAdapter implements HttpServerInterface {
         }
       }
     )
-    this.app.get('/docs', swaggerUI({ url: '/doc' }))
+    this.app.get('/docs', apiReference({
+      theme: 'alternate',
+      spec: {
+        url: '/doc'
+      }
+    }))
     this.app.onError((error: Error, context: Context) => {
       if (error instanceof HTTPException) {
         return context.json({
