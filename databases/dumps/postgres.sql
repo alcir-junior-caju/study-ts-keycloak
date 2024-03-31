@@ -1,7 +1,7 @@
 DROP SCHEMA IF EXISTS keycloak cascade;
 CREATE SCHEMA keycloak;
 CREATE TABLE keycloak.users (
-  id uuid PRIMARY KEY,
+  id UUID PRIMARY KEY,
   name text NOT NULL,
   email text NOT NULL UNIQUE,
   tax_id text UNIQUE,
