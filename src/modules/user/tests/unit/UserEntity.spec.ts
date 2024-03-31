@@ -1,4 +1,4 @@
-import { EmailValueObject, IdValueObject, InvalidEmailError, InvalidNameError, InvalidUUIDError, NameValueObject, TaxIdValueObject } from '@modules/shared'
+import { EmailValueObject, IdValueObject, InvalidEmailError, InvalidNameError, InvalidTaxIdError, InvalidUUIDError, NameValueObject, TaxIdValueObject } from '@modules/shared'
 import { UserEntity } from '@modules/user'
 
 const idString = 'd290f1ee-6c54-4b01-90e6-d701748f0851'
@@ -79,6 +79,6 @@ describe('UserEntity Unit Tests', () => {
   it('should be throw an error if taxId is invalid', () => {
     expect(() => {
       new UserEntity({ ...userStub, taxId: new TaxIdValueObject('invalid-tax-id') })
-    }).toThrow()
+    }).toThrow(new InvalidTaxIdError())
   })
 })

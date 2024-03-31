@@ -33,40 +33,6 @@ const userSchemaError = z.object({
   })
 })
 
-// export const userPostRoute = {
-//   method: 'post',
-//   path: resource,
-//   tags,
-//   request: {
-//     body: {
-//       content: {
-//         'application/json': {
-//           schema: userSchemaRequest
-//         }
-//       },
-//       description: 'Create a new user'
-//     }
-//   },
-//   responses: {
-//     200: {
-//       content: {
-//         'application/json': {
-//           schema: userSchemaResponse
-//         }
-//       },
-//       description: 'User created'
-//     },
-//     400: {
-//       content: {
-//         'application/json': {
-//           schema: userSchemaError
-//         }
-//       },
-//       description: 'Invalid input'
-//     }
-//   }
-// } as const
-
 export const userPatchRoute = {
   method: 'patch',
   path: `${resource}/:id`,

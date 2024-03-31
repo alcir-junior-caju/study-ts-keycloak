@@ -23,7 +23,8 @@ export class PgPromiseAdapter implements ConnectionInterface {
   }
 
   async query (statement: string, params?: any): Promise<any> {
-    return this.connection.query(statement, params)
+    const data = await this.connection.query(statement, params)
+    return data
   }
 
   async close (): Promise<void> {

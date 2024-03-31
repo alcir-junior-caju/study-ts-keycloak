@@ -1,14 +1,14 @@
-import { CreateUserUseCase, GetUserUseCase, HonoAdapter, PgPromiseAdapter, UserHttpController, UserRepository } from './modules'
+import { ChangeUserUseCase, GetUserUseCase, HonoAdapter, PgPromiseAdapter, UserHttpController, UserRepository } from './modules'
 
 async function main (): Promise<void> {
   const connection = new PgPromiseAdapter()
   const userRepository = new UserRepository(connection)
-  const createUser = new CreateUserUseCase(userRepository)
+  const changeUser = new ChangeUserUseCase(userRepository)
   const getUser = new GetUserUseCase(userRepository)
   const httpServer = new HonoAdapter()
   new UserHttpController(
     httpServer,
-    createUser,
+    changeUser,
     getUser
   )
   httpServer.listen(8888)

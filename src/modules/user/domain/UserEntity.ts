@@ -30,7 +30,7 @@ export class UserEntity extends BaseEntity implements AggregateRootInterface {
   }
 
   get taxId (): TaxIdValueObject {
-    if (!this._taxId) throw new Error('tax_id-is_not_defined')
+    if (!this._taxId) throw new Error('tax_id_is_not_defined')
     return this._taxId
   }
 }
