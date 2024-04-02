@@ -1,4 +1,9 @@
 import { IdValueObject, InvalidUUIDError } from '@modules/shared'
+import { Chance } from 'chance'
+
+const chance = new Chance()
+const idString = chance.guid()
+const invalidIdString = chance.word()
 
 describe('IdValueObject Unit Tests', () => {
   const validateSpy = vi.spyOn(IdValueObject.prototype as any, 'validate')
@@ -9,14 +14,13 @@ describe('IdValueObject Unit Tests', () => {
   })
 
   it('should be test default value object with value', () => {
-    const idString = 'd290f1ee-6c54-4b01-90e6-d701748f0851'
     const idValueObject = new IdValueObject(idString)
     expect(idValueObject.value).toBe(idString)
   })
 
   it('should be invalid id value object', () => {
     expect(() => {
-      new IdValueObject('invalid-id')
+      new IdValueObject(invalidIdString)
       expect(validateSpy).toBeCalledTimes(1)
     }).toThrow(new InvalidUUIDError())
   })

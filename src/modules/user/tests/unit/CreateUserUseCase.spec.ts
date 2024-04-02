@@ -1,13 +1,21 @@
-import { EmailValueObject, IdValueObject, InvalidNameError, InvalidUUIDError, NameValueObject, TaxIdValueObject } from '@modules/shared'
+import { EmailValueObject, IdValueObject, InvalidEmailError, InvalidNameError, InvalidUUIDError, NameValueObject, TaxIdValueObject } from '@modules/shared'
 import { CreateUserUseCase, UserEntity, type UserRepositoryInterface } from '@modules/user'
+import { Chance } from 'chance'
 
-const idString = 'd290f1ee-6c54-4b01-90e6-d701748f0851'
+const chance = new Chance()
+const idString = chance.guid()
+const nameString = chance.name()
+const emailString = chance.email()
+const taxIdString = chance.cpf({ formatted: false })
+const invalidIdString = chance.word()
+const invalidNameString = chance.letter({ length: 1 })
+const invalidEmailString = chance.word()
 
 const userStub = new UserEntity({
   id: new IdValueObject(idString),
-  name: new NameValueObject('John Doe'),
-  email: new EmailValueObject('johndoe@email.com'),
-  taxId: new TaxIdValueObject('97456321558')
+  name: new NameValueObject(nameString),
+  email: new EmailValueObject(emailString),
+  taxId: new TaxIdValueObject(taxIdString)
 })
 
 const MockUserRepository = (): UserRepositoryInterface => ({
@@ -22,9 +30,9 @@ describe('CreateUserUseCase Unit Tests', () => {
     const persistUserUseCase = new CreateUserUseCase(userRepository)
     const input = {
       id: idString,
-      name: 'John Doe',
-      email: 'johndoe@email.com',
-      taxId: '97456321558'
+      name: nameString,
+      email: emailString,
+      taxId: taxIdString
     }
     const output = await persistUserUseCase.execute(input)
     expect(userRepository.save).toBeCalledTimes(1)
@@ -37,10 +45,10 @@ describe('CreateUserUseCase Unit Tests', () => {
     const userRepository = MockUserRepository()
     const persistUserUseCase = new CreateUserUseCase(userRepository)
     const input = {
-      id: 'invalid-id',
-      name: 'John Doe',
-      email: 'johndoe@email.com',
-      taxId: '97456321558'
+      id: invalidIdString,
+      name: nameString,
+      email: emailString,
+      taxId: taxIdString
     }
     await expect(persistUserUseCase.execute(input)).rejects.toThrow(new InvalidUUIDError())
   })
@@ -50,10 +58,22 @@ describe('CreateUserUseCase Unit Tests', () => {
     const persistUserUseCase = new CreateUserUseCase(userRepository)
     const input = {
       id: idString,
-      name: 'John',
-      email: 'johndoe@email.com',
-      taxId: '97456321558'
+      name: invalidNameString,
+      email: emailString,
+      taxId: taxIdString
     }
     await expect(persistUserUseCase.execute(input)).rejects.toThrow(new InvalidNameError())
+  })
+
+  it('should be able to persist a user with invalid email', async () => {
+    const userRepository = MockUserRepository()
+    const persistUserUseCase = new CreateUserUseCase(userRepository)
+    const input = {
+      id: idString,
+      name: nameString,
+      email: invalidEmailString,
+      taxId: taxIdString
+    }
+    await expect(persistUserUseCase.execute(input)).rejects.toThrow(new InvalidEmailError())
   })
 })

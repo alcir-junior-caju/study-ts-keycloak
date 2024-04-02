@@ -1,21 +1,32 @@
 import { EmailValueObject, IdValueObject, InvalidEmailError, InvalidNameError, InvalidTaxIdError, NameValueObject, TaxIdValueObject } from '@modules/shared'
 import { ChangeUserUseCase, UserEntity, type UserRepositoryInterface } from '@modules/user'
+import { Chance } from 'chance'
 
-const idString = 'd290f1ee-6c54-4b01-90e6-d701748f0851'
-const idStringChange = 'd290f1ee-6c54-4b01-90e6-d701748f0852'
+const chance = new Chance()
+const idString = chance.guid()
+const nameString = chance.name()
+const emailString = chance.email()
+const taxIdString = chance.cpf({ formatted: false })
+const idStringChange = chance.guid()
+const nameStringChange = chance.name()
+const emailStringChange = chance.email()
+const taxIdStringChange = chance.cpf({ formatted: false })
+const idStringNotFound = chance.guid()
+const invalidNameString = chance.letter({ length: 1 })
+const invalidEmailString = chance.word()
 
 const userStub = new UserEntity({
   id: new IdValueObject(idString),
-  name: new NameValueObject('John Doe'),
-  email: new EmailValueObject('johndoe@email.com'),
-  taxId: new TaxIdValueObject('97456321558')
+  name: new NameValueObject(nameString),
+  email: new EmailValueObject(emailString),
+  taxId: new TaxIdValueObject(taxIdString)
 })
 
 const changeUserStub = new UserEntity({
   id: new IdValueObject(idStringChange),
-  name: new NameValueObject('Jane Doe'),
-  email: new EmailValueObject('janedoe@rmail.com'),
-  taxId: new TaxIdValueObject('71428793860')
+  name: new NameValueObject(nameStringChange),
+  email: new EmailValueObject(emailStringChange),
+  taxId: new TaxIdValueObject(taxIdStringChange)
 })
 
 const MockUserRepository = (notFound?: boolean): UserRepositoryInterface => ({
@@ -30,9 +41,9 @@ describe('ChangeUserUseCase Unit Tests', () => {
     const changeUserUseCase = new ChangeUserUseCase(userRepository)
     const input = {
       id: idStringChange,
-      name: 'Jane Doe',
-      email: 'janedoe@email.com',
-      taxId: '71428793860',
+      name: nameStringChange,
+      email: emailStringChange,
+      taxId: taxIdStringChange,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date)
     }
@@ -51,10 +62,10 @@ describe('ChangeUserUseCase Unit Tests', () => {
     const userRepository = MockUserRepository(true)
     const changeUserUseCase = new ChangeUserUseCase(userRepository)
     const input = {
-      id: 'd290f1ee-6c54-4b01-90e6-d701748f0853',
-      name: 'Jane Doe',
-      email: 'janedoe@email.com',
-      taxId: '71428793860'
+      id: idStringNotFound,
+      name: nameStringChange,
+      email: emailStringChange,
+      taxId: taxIdStringChange
     }
     await expect(changeUserUseCase.execute(input)).rejects.toThrow(new Error('user_not_found'))
   })
@@ -64,9 +75,9 @@ describe('ChangeUserUseCase Unit Tests', () => {
     const changeUserUseCase = new ChangeUserUseCase(userRepository)
     const input = {
       id: idStringChange,
-      name: 'Jane',
-      email: 'janedoe@email.com',
-      taxId: '71428793860',
+      name: invalidNameString,
+      email: emailStringChange,
+      taxId: taxIdStringChange,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date)
     }
@@ -78,9 +89,9 @@ describe('ChangeUserUseCase Unit Tests', () => {
     const changeUserUseCase = new ChangeUserUseCase(userRepository)
     const input = {
       id: idStringChange,
-      name: 'Jane Doe',
-      email: 'janedoe@',
-      taxId: '71428793860',
+      name: nameStringChange,
+      email: invalidEmailString,
+      taxId: taxIdStringChange,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date)
     }
@@ -92,8 +103,8 @@ describe('ChangeUserUseCase Unit Tests', () => {
     const changeUserUseCase = new ChangeUserUseCase(userRepository)
     const input = {
       id: idStringChange,
-      name: 'Jane Doe',
-      email: 'janedoe@email.com',
+      name: nameStringChange,
+      email: emailStringChange,
       taxId: '11111111111',
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date)

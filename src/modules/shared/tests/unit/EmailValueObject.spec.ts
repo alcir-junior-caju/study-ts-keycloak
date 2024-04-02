@@ -1,4 +1,9 @@
 import { EmailValueObject, InvalidEmailError } from '@modules/shared/domain'
+import { Chance } from 'chance'
+
+const chance = new Chance()
+const validEmailString = chance.email()
+const invalidEmailString = chance.word()
 
 describe('EmailValueObject Unit Tests', () => {
   const validateSpy = vi.spyOn(EmailValueObject.prototype as any, 'validate')
@@ -10,14 +15,13 @@ describe('EmailValueObject Unit Tests', () => {
     }).toThrow(new InvalidEmailError())
 
     expect(() => {
-      new EmailValueObject('johndoe')
+      new EmailValueObject(invalidEmailString)
       expect(validateSpy).toBeCalledTimes(1)
     }).toThrow(new InvalidEmailError())
   })
 
   it('should be test value with value', () => {
-    const emailString = 'johndoe@email.com'
-    const emailValueObject = new EmailValueObject(emailString)
-    expect(emailValueObject.value).toBe(emailString)
+    const emailValueObject = new EmailValueObject(validEmailString)
+    expect(emailValueObject.value).toBe(validEmailString)
   })
 })

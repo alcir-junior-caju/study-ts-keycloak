@@ -1,13 +1,18 @@
 import { EmailValueObject, IdValueObject, NameValueObject, TaxIdValueObject } from '@modules/shared'
 import { GetUserUseCase, UserEntity, type UserRepositoryInterface } from '@modules/user'
+import { Chance } from 'chance'
 
-const idString = 'd290f1ee-6c54-4b01-90e6-d701748f0851'
+const chance = new Chance()
+const idString = chance.guid()
+const nameString = chance.name()
+const emailString = chance.email()
+const taxIdString = chance.cpf({ formatted: false })
 
 const userStub = new UserEntity({
   id: new IdValueObject(idString),
-  name: new NameValueObject('John Doe'),
-  email: new EmailValueObject('johndoe@email.com'),
-  taxId: new TaxIdValueObject('97456321558')
+  name: new NameValueObject(nameString),
+  email: new EmailValueObject(emailString),
+  taxId: new TaxIdValueObject(taxIdString)
 })
 
 const MockUserRepository = (empty?: boolean): UserRepositoryInterface => ({
@@ -20,13 +25,10 @@ describe('GetUserUseCase Unit Tests', () => {
   it('should be able to get a user', async () => {
     const userRepository = MockUserRepository()
     const getUserUseCase = new GetUserUseCase(userRepository)
-
     const input = {
       id: idString
     }
-
     const output = await getUserUseCase.execute(input)
-
     expect(userRepository.find).toBeCalledTimes(1)
     expect(output.id).toBe(userStub.id.value)
     expect(output.name).toBe(userStub.name.value)
@@ -37,11 +39,9 @@ describe('GetUserUseCase Unit Tests', () => {
   it('should not be able to get a user if not exists', async () => {
     const userRepository = MockUserRepository(true)
     const getUserUseCase = new GetUserUseCase(userRepository)
-
     const input = {
       id: idString
     }
-
     await expect(getUserUseCase.execute(input)).rejects.toThrow('user_not_found')
   })
 })

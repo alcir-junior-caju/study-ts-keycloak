@@ -1,4 +1,10 @@
 import { BaseEntity, IdValueObject, InvalidUUIDError } from '@modules/shared'
+import { Chance } from 'chance'
+
+const chance = new Chance()
+const idString = chance.guid()
+const createdAt = chance.date()
+const updatedAt = chance.date()
 
 describe('BaseEntity Unit Tests', () => {
   it('should be test entity empty', () => {
@@ -9,10 +15,7 @@ describe('BaseEntity Unit Tests', () => {
   })
 
   it('should be test entity with values', () => {
-    const idString = 'd290f1ee-6c54-4b01-90e6-d701748f0851'
     const id = new IdValueObject(idString)
-    const createdAt = new Date()
-    const updatedAt = new Date()
     const entity = new BaseEntity(id, createdAt, updatedAt)
     expect(entity.id).toBe(id)
     expect(entity.createdAt).toBe(createdAt)
@@ -20,20 +23,17 @@ describe('BaseEntity Unit Tests', () => {
   })
 
   it('should be test entity with get id', () => {
-    const idString = 'd290f1ee-6c54-4b01-90e6-d701748f0851'
     const id = new IdValueObject(idString)
     const entity = new BaseEntity(id)
     expect(entity.id).toBe(id)
   })
 
   it('should be test entity with get createdAt', () => {
-    const createdAt = new Date()
     const entity = new BaseEntity(undefined, createdAt)
     expect(entity.createdAt).toBe(createdAt)
   })
 
   it('should be test entity with get updatedAt', () => {
-    const updatedAt = new Date()
     const entity = new BaseEntity(undefined, undefined, updatedAt)
     expect(entity.updatedAt).toBe(updatedAt)
   })

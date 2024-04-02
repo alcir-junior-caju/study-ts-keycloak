@@ -1,4 +1,9 @@
 import { InvalidNameError, NameValueObject } from '@modules/shared/domain'
+import { Chance } from 'chance'
+
+const chance = new Chance()
+const validNameString = chance.name()
+const invalidNameString = chance.letter({ length: 1 })
 
 describe('NameValueObject Unit Tests', () => {
   const validateSpy = vi.spyOn(NameValueObject.prototype as any, 'validate')
@@ -10,14 +15,13 @@ describe('NameValueObject Unit Tests', () => {
     }).toThrow(new InvalidNameError())
 
     expect(() => {
-      new NameValueObject('j')
+      new NameValueObject(invalidNameString)
       expect(validateSpy).toBeCalledTimes(1)
     }).toThrow(new InvalidNameError())
   })
 
   it('should be test value with value', () => {
-    const nameString = 'John Doe'
-    const nameValueObject = new NameValueObject(nameString)
-    expect(nameValueObject.value).toBe(nameString)
+    const nameValueObject = new NameValueObject(validNameString)
+    expect(nameValueObject.value).toBe(validNameString)
   })
 })

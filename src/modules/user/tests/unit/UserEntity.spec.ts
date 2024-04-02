@@ -1,12 +1,20 @@
 import { EmailValueObject, IdValueObject, InvalidEmailError, InvalidNameError, InvalidTaxIdError, InvalidUUIDError, NameValueObject, TaxIdValueObject } from '@modules/shared'
 import { UserEntity } from '@modules/user'
+import { Chance } from 'chance'
 
-const idString = 'd290f1ee-6c54-4b01-90e6-d701748f0851'
+const chance = new Chance()
+const idString = chance.guid()
+const nameString = chance.name()
+const emailString = chance.email()
+const taxIdString = chance.cpf({ formatted: false })
+const invalidIdString = chance.word()
+const invalidNameString = chance.letter({ length: 1 })
+const invalidEmailString = chance.word()
 
 const userStub = {
   id: new IdValueObject(idString),
-  name: new NameValueObject('John Doe'),
-  email: new EmailValueObject('johndoe@email.com')
+  name: new NameValueObject(nameString),
+  email: new EmailValueObject(emailString)
 }
 
 describe('UserEntity Unit Tests', () => {
@@ -42,7 +50,7 @@ describe('UserEntity Unit Tests', () => {
   })
 
   it('should be create a new user entity with tax id', () => {
-    const taxId = new TaxIdValueObject('97456321558')
+    const taxId = new TaxIdValueObject(taxIdString)
     const userEntity = new UserEntity({
       ...userStub,
       taxId
@@ -60,25 +68,25 @@ describe('UserEntity Unit Tests', () => {
 
   it('should be throw an error if id is invalid', () => {
     expect(() => {
-      new UserEntity({ ...userStub, id: new IdValueObject('invalid_id') })
+      new UserEntity({ ...userStub, id: new IdValueObject(invalidIdString) })
     }).toThrow(new InvalidUUIDError())
   })
 
   it('should be throw an error if name is invalid', () => {
     expect(() => {
-      new UserEntity({ ...userStub, name: new NameValueObject('invalid-name') })
+      new UserEntity({ ...userStub, name: new NameValueObject(invalidNameString) })
     }).toThrow(new InvalidNameError())
   })
 
   it('should be throw an error if email is invalid', () => {
     expect(() => {
-      new UserEntity({ ...userStub, email: new EmailValueObject('invalid-email') })
+      new UserEntity({ ...userStub, email: new EmailValueObject(invalidEmailString) })
     }).toThrow(new InvalidEmailError())
   })
 
   it('should be throw an error if taxId is invalid', () => {
     expect(() => {
-      new UserEntity({ ...userStub, taxId: new TaxIdValueObject('invalid-tax-id') })
+      new UserEntity({ ...userStub, taxId: new TaxIdValueObject('11111111111') })
     }).toThrow(new InvalidTaxIdError())
   })
 })

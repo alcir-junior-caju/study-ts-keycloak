@@ -1,8 +1,16 @@
 import { AxiosAdapter, EmailValueObject, IdValueObject, NameValueObject, PgPromiseAdapter, TaxIdValueObject } from '@modules/shared'
 import { UserEntity } from '@modules/user/domain'
 import { UserRepository } from '@modules/user/repository'
+import { Chance } from 'chance'
 
-const idString = 'd290f1ee-6c54-4b01-90e6-d701748f0851'
+const chance = new Chance()
+const idString = chance.guid()
+const nameString = chance.name()
+const emailString = chance.email()
+const taxIdString = chance.cpf({ formatted: false })
+const nameChangedString = chance.name()
+const emailChangedString = chance.email()
+const taxIdChangedString = chance.cpf({ formatted: false })
 
 describe('UserApi Integration Tests', () => {
   let connection: PgPromiseAdapter
@@ -22,15 +30,15 @@ describe('UserApi Integration Tests', () => {
     const httpClient = new AxiosAdapter()
     const entity = new UserEntity({
       id: new IdValueObject(idString),
-      name: new NameValueObject('John Doe'),
-      email: new EmailValueObject(`${Date.now()}@update.com`),
-      taxId: new TaxIdValueObject('97456321558')
+      name: new NameValueObject(nameString),
+      email: new EmailValueObject(emailString),
+      taxId: new TaxIdValueObject(taxIdString)
     })
     await userRepository.save(entity)
     const input = {
-      name: 'Jane Doe',
-      email: `${Date.now()}@update.com`,
-      taxId: '71428793860'
+      name: nameChangedString,
+      email: emailChangedString,
+      taxId: taxIdChangedString
     }
     const response = await httpClient.patch(
       `http://127.0.0.1:8888/users/${entity.id.value}`,
@@ -52,9 +60,9 @@ describe('UserApi Integration Tests', () => {
     const httpClient = new AxiosAdapter()
     const entity = new UserEntity({
       id: new IdValueObject(idString),
-      name: new NameValueObject('John Doe'),
-      email: new EmailValueObject(`${Date.now()}@get.com`),
-      taxId: new TaxIdValueObject('97456321558')
+      name: new NameValueObject(nameString),
+      email: new EmailValueObject(emailString),
+      taxId: new TaxIdValueObject(taxIdString)
     })
     await userRepository.save(entity)
     const response = await httpClient.get(`http://127.0.0.1:8888/users/${entity.id.value}`)
