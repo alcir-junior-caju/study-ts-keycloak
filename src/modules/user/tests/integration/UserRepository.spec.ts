@@ -13,8 +13,8 @@ describe('UserRepository Integration Tests', () => {
     userRepository = new UserRepository(connection)
   })
 
-  afterAll(async () => {
-    await connection.query('DELETE FROM keycloak.users')
+  afterEach(async () => {
+    await connection.query('TRUNCATE keycloak.users')
     await connection.close()
   })
 

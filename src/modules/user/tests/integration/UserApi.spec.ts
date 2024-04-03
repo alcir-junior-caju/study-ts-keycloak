@@ -22,7 +22,7 @@ describe('UserApi Integration Tests', () => {
   })
 
   afterEach(async () => {
-    await connection.query('DELETE FROM keycloak.users')
+    await connection.query('TRUNCATE keycloak.users')
     await connection.close()
   })
 
