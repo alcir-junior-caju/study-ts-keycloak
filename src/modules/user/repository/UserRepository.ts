@@ -31,4 +31,8 @@ export class UserRepository implements UserRepositoryInterface {
     })
     return userEntity
   }
+
+  async delete (id: string): Promise<void> {
+    await this.connection.query('DELETE FROM keycloak.users WHERE id = $1', [id])
+  }
 }
