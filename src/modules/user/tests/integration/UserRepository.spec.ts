@@ -14,7 +14,6 @@ describe('UserRepository Integration Tests', () => {
   })
 
   afterEach(async () => {
-    await connection.query('TRUNCATE keycloak.users')
     await connection.close()
   })
 
@@ -31,6 +30,7 @@ describe('UserRepository Integration Tests', () => {
     expect(output.name.value).toBe(userEntity.name.value)
     expect(output.email.value).toBe(userEntity.email.value)
     expect(output.taxId.value).toBe(userEntity.taxId.value)
+    await userRepository.delete(userEntity.id.value)
   })
 
   it('should be throw error when user not found', async () => {
@@ -50,6 +50,7 @@ describe('UserRepository Integration Tests', () => {
     expect(output.name.value).toBe(userEntity.name.value)
     expect(output.email.value).toBe(userEntity.email.value)
     expect(output.taxId.value).toBe(userEntity.taxId.value)
+    await userRepository.delete(userEntity.id.value)
   })
 
   it('should be update a user', async () => {
@@ -73,5 +74,6 @@ describe('UserRepository Integration Tests', () => {
     expect(output.name.value).toBe(userUpdatedEntity.name.value)
     expect(output.email.value).toBe(userUpdatedEntity.email.value)
     expect(output.taxId.value).toBe(userUpdatedEntity.taxId.value)
+    await userRepository.delete(userEntity.id.value)
   })
 })

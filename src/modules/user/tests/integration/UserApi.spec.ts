@@ -22,7 +22,6 @@ describe('UserApi Integration Tests', () => {
   })
 
   afterEach(async () => {
-    await connection.query('TRUNCATE keycloak.users')
     await connection.close()
   })
 
@@ -54,6 +53,7 @@ describe('UserApi Integration Tests', () => {
       createdAt: expect.any(String),
       updatedAt: expect.any(String)
     })
+    await userRepository.delete(entity.id.value)
   })
 
   it('should get user api', async () => {
@@ -75,5 +75,6 @@ describe('UserApi Integration Tests', () => {
       createdAt: expect.any(String),
       updatedAt: expect.any(String)
     })
+    await userRepository.delete(entity.id.value)
   })
 })
