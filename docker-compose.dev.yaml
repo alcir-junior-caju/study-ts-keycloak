@@ -1,7 +1,10 @@
 version: '3'
 
-services:
+networks:
+  keycloak-network:
+    external: true
 
+services:
   keycloak-postgres:
     image: postgres:latest
     container_name: keycloak-postgres
@@ -30,11 +33,11 @@ services:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - KC_DB=mysql
-      - KC_DB_URL=jdbc:mysql://mysql:3306/keycloak
+      - KC_DB_URL=jdbc:mysql://keycloak-mysql:3306/keycloak
       - KC_DB_USERNAME=root
       - KC_DB_PASSWORD=root
     volumes:
-      - ./keycloak/keywind/theme/keywind:/opt/keycloak/themes/keywind
+      - ./docker/keycloak/keywind:/opt/keycloak/themes/keywind
     depends_on:
       keycloak-mysql:
         condition: service_healthy
@@ -59,7 +62,3 @@ services:
       retries: 3
     networks:
       - keycloak-network
-
-networks:
-  keycloak-network:
-    external: true

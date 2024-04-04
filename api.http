@@ -39,10 +39,10 @@ User-Agent: {{userAgent}}
 
 ### ==================== Keycloak ==================== ###
 ### Generate access token
-POST http://localhost:8787/realms/test/protocol/openid-connect/token
+POST http://localhost:8787/realms/dashboard/protocol/openid-connect/token
 Content-Type: application/x-www-form-urlencoded
 
-username=caju@cajucomunica.com.br
+username=contato@cajucomunica.com.br
 &password=password
 &grant_type=password
 &client_id=api
