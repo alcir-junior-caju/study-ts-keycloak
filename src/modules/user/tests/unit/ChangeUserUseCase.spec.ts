@@ -32,7 +32,8 @@ const changeUserStub = new UserEntity({
 const MockUserRepository = (notFound?: boolean): UserRepositoryInterface => ({
   save: vitest.fn().mockResolvedValue(Promise.resolve(userStub)),
   update: vitest.fn().mockResolvedValue(Promise.resolve(changeUserStub)),
-  find: notFound ? vitest.fn() : vitest.fn().mockResolvedValue(Promise.resolve(userStub))
+  find: notFound ? vitest.fn() : vitest.fn().mockResolvedValue(Promise.resolve(userStub)),
+  delete: vitest.fn()
 })
 
 describe('ChangeUserUseCase Unit Tests', () => {

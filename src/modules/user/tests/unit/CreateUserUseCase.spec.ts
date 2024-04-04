@@ -21,7 +21,8 @@ const userStub = new UserEntity({
 const MockUserRepository = (): UserRepositoryInterface => ({
   save: vitest.fn(),
   update: vitest.fn(),
-  find: vitest.fn().mockResolvedValue(Promise.resolve(userStub))
+  find: vitest.fn().mockResolvedValue(Promise.resolve(userStub)),
+  delete: vitest.fn()
 })
 
 describe('CreateUserUseCase Unit Tests', () => {
