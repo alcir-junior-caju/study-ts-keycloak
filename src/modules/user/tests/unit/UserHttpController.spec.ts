@@ -32,7 +32,7 @@ describe('UserHttpController Unit Tests', () => {
     expect(mockHttpServer.on).toHaveBeenCalledWith(expect.any(Object), expect.any(Function))
   })
 
-  test('should be calls ChangeUserUseCase on patch request', async () => {
+  it('should be calls ChangeUserUseCase on patch request', async () => {
     new UserHttpController(
       mockHttpServer,
       mockChangeUserUseCase as any,
@@ -44,7 +44,7 @@ describe('UserHttpController Unit Tests', () => {
     expect(mockChangeUserUseCase.execute).toHaveBeenCalledWith({ ...mockBody, id: mockParams.id })
   })
 
-  test('should be calls GetUserUseCase on get request', async () => {
+  it('should be calls GetUserUseCase on get request', async () => {
     new UserHttpController(
       mockHttpServer,
       mockChangeUserUseCase as any,
